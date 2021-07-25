@@ -11,6 +11,9 @@ googleAnalytics = "UA-144643471-1"
 mainSectionTitle = "Posts recientes"
 images = ["https://s3.us-east-2.amazonaws.com/brunovelazquez.com.bucket/bg-index.webp"]
 rss = true
+tagsOverview = true # show tags overview by default.
+showProjectsList = true # show projects list by default (if projects data file exists).
+projectsUrl = "https://github.com/brunovelazquez" # title link for projects list
 
 [params.comments]
 enabled = false
