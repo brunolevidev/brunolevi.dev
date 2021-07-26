@@ -1,5 +1,5 @@
 ---
-title: "Provisionamiento Automatizado De Servidores"
+title: "Provisionamiento automatizado de dervidores"
 date: 2021-07-16
 draft: false
 
