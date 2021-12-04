@@ -1,4 +1,7 @@
-<script src="/js/feather.min.js"></script>
-<script>
-    feather.replace()
-</script>
+{{ $feather := resources.Get "/js/feather.min.js" }}
+{{ $bootstrap := resources.Get "/libs/bootstrap-5.1.3/dist/js/bootstrap.bundle.min.js" }}
+{{ $main := resources.Get "/js/main.js" }}
+
+{{ $fullscript := slice $feather $bootstrap $main | resources.Concat "/js/vendor.js" | minify | fingerprint "sha512" }}
+
+<script src="{{ $fullscript.RelPermalink }}" integrity="{{ $fullscript.Data.Integrity }}"></script>
