@@ -6,16 +6,31 @@ title = "Bruno Velázquez"
 [menu]
   [[menu.main]]
     name = "Home"
-    pre = "home"
+    pre = ""
     url = "/"
     weight = 1
   [[menu.main]]
     name = "Posts"
-    pre = "pen-tool"
+    pre = ""
     url = "/posts/"
     weight = 2
   [[menu.main]]
     name = "Tags"
-    pre = "tag"
+    pre = ""
     url = "/tags/"
+    weight = 3
+  [[menu.social]]
+    name = "Github"
+    pre = "github"
+    url = "https://github.com/BrunoVelazquez"
+    weight = 1
+  [[menu.social]]
+    name = "Instagram"
+    pre = "instagram"
+    url = "https://www.instagram.com/brunovelazquez_/"
+    weight = 2
+  [[menu.social]]
+    name = "Twitter"
+    pre = "twitter"
+    url = "https://twitter.com/brunovelazquez_"
     weight = 3
