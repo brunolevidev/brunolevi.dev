@@ -77,6 +77,8 @@ $primary: #ff69c8;
         radial-gradient(rgba(white, 0.2) 50%, transparent 60%) 50% 50% / 5% 100%,
         radial-gradient(rgba(white, 0.2) 50%, transparent 60%) 50% 50% / 70% 5%;
         background-repeat: no-repeat;
+        animation-duration: 2s;
+        animation-name: flareAnim;
     }
     
     span:first-child {
@@ -95,6 +97,16 @@ $primary: #ff69c8;
         -webkit-text-fill-color: transparent;
     }
 }
+
+@keyframes flareAnim {
+    from {
+      opacity: 0%;
+    }
+  
+    to {
+      opacity: 100%;
+    }
+  }
 
 .bv-header-h2 {
     font-family: 'Mr Dafoe';
