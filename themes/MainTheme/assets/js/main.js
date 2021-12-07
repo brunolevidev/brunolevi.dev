@@ -7,9 +7,9 @@ document.addEventListener("DOMContentLoaded", () => {
     anime.timeline({loop: true})
         .add({
             targets: '.bv-grid',
-            right: '-1000px',
+            right: ['-1200px', '-200px'],
             easing: 'linear',
-            duration: 1000
+            duration: 10000
         });
 
     anime.timeline({loop: false})
@@ -21,7 +21,7 @@ document.addEventListener("DOMContentLoaded", () => {
             easing: "easeOutExpo",
             duration: 1000,
             delay: (el, i) => 70*i
-        })
+        });
 
     anime.timeline({loop: false})
         .add({
@@ -29,5 +29,21 @@ document.addEventListener("DOMContentLoaded", () => {
             rotateY: [-90, 0],
             duration: 1500,
             delay: (el, i) => 45 * i
-        })
+        });
+
+    anime.timeline({loop: false})
+        .add({
+            targets: '.temp',
+            translateX: ['50px','0px'],
+            easing: 'easeOutExpo',
+            duration: 1000
+        });
+
+    anime.timeline({loop: false})
+        .add({
+            targets: '.temp2',
+            translateX: ['-50px','0px'],
+            easing: 'easeOutExpo',
+            duration: 1000
+        });
 });

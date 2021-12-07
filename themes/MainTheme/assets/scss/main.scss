@@ -6,6 +6,7 @@
 // Override scss variables here:
 
 $primary: #ff69c8;
+$secondary: #59c1fe;
 
 // Import bootstrap
 @import "../libs/bootstrap-5.1.3/scss/bootstrap.scss";
@@ -124,11 +125,40 @@ $primary: #ff69c8;
     background: 
     linear-gradient(transparent 65%, $glow 75%, $main 80%, $glow 85%, transparent 95%),
     linear-gradient(90deg, transparent 65%, $glow 75%, $main 80%, $glow 85%, transparent 95%);
-    background-size: 30px 30px;
-    width: 200vw;
-    height: 300vh;
+    background-size: 50px 50px;
+    width: 5000px;
+    height: 2500px;
     position: absolute;
-    bottom: -120vh;
+    bottom: -1200px;
     transform: rotateX(-100deg);
     -webkit-mask-image: linear-gradient(rgba(0,0,0,1), rgba(0,0,0,0) 80%);
+}
+
+.temp {
+    width: 100px;
+    height: 100px;
+    position: absolute;
+    background-color: #00a1ef;
+    right: 0;
+    top: 0;
+}
+
+.temp2 {
+    width: 100px;
+    height: 100px;
+    position: absolute;
+    background-color: #00a1ef;
+    left: 0;
+    top: 0;
+}
+
+.bv-image {
+    object-fit: cover;
+    object-position: center;
+}
+
+.bv-profile-pic {
+    border-radius: 50%;
+    width: 80px;
+    height: 80px;
 }
