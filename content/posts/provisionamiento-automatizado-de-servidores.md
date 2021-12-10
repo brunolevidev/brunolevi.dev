@@ -7,7 +7,7 @@ subtitle: "Digital Ocean + Ansible = 💪🤙👌"
 description: "En esta guía mostraré como automatizar el provisionamiento de tus servidores con Ansible, en esta ocasión intentaremos con la creación de un una instancia que pueda correr un entorno LEMP sobre Ubuntu 18.04 LTS"
 categories: ["Automatización", "Digital Ocean", "Ansible", "Nginx"]
 tags: ["Automatización", "Digital Ocean", "Ansible", "Nginx", "Virtualización"]
-images: ["https://s3.us-east-2.amazonaws.com/brunovelazquez.com.bucket/2021-07-16-provisionamiento-automatizado-de-servidores/banner.webp"]
+banner: "https://s3.us-east-2.amazonaws.com/brunovelazquez.com.bucket/2021-07-16-provisionamiento-automatizado-de-servidores/banner.webp"
 
 ---
 

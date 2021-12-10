@@ -14,7 +14,7 @@
 </div>
 
 <div class="container my-5">
-    <div class="row align-items-center rounded-3 border border-primary shadow-lg">
+    <div class="row align-items-center rounded-3">
         <div class="col-lg-7 p-5">
             <div class="d-flex justify-content-center align-items-top">
                 <div class="flex-shrink-0">
@@ -24,7 +24,7 @@
                     <h1 class="display-5 fw-bold lh-1">Ingeniero en Desarrollo de Software</h1>
                 </div>
             </div>
-            <p class="lead my-5">Orgullosamente del Estado de Morelos, especializado en construir la nueva web 3.0 para tu negocio o empresa. Aficionado en el desarrollo de videojuegos e internet de las cosas.</p>
+            <p class="lead my-5">Orgullosamente del Estado de Morelos, especializado en construir soluciones de software integrales para tu negocio o empresa. Aficionado en el desarrollo de videojuegos e internet de las cosas.</p>
             <div class="d-grid gap-2 d-md-flex justify-content-md-start mb-4 mb-lg-3">
               <a href="#" class="btn btn-primary btn-lg px-4 me-md-2 fw-bold">Contactar</a>
               <a href="#" class="btn btn-outline-secondary btn-lg px-4">Ver portafolio</a>
@@ -36,4 +36,28 @@
     </div>
 </div>
 
+<div class="bg-secondary pt-5 pb-5">
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <h1 class="text-center text-yellow-400 my-5">POST RECIENTES</h1>
+            </div>
+        </div>
+        <div class="row">
+            {{ range first 3 .Site.RegularPages }}
+                <div class="col my-5">
+                    <div class="card bg-dark rounded shadow border-0">
+                        <img src="{{ .Param "banner" }}" class="card-img-top" alt="...">
+                        <div class="card-body p-5">
+                        <h5 class="card-title">{{ .Title }}</h5>
+                        <span>{{ .Date.Format "2 January 2006" }}</span>
+                        <p class="card-text">{{ .Description }}</p>
+                        <a href="{{ .Permalink }}" class="btn btn-lg btn-primary fw-bold">Leer post</a>
+                        </div>
+                    </div>
+                </div>
+            {{ end }}
+        </div>
+    </div>
+</div>
 {{ end }}

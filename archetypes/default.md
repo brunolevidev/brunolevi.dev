@@ -7,7 +7,6 @@ subtitle: ""
 description: ""
 categories: []
 tags: []
-images: []
-
+banner: ""
 ---
 

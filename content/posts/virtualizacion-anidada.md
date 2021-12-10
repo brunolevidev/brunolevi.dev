@@ -7,7 +7,7 @@ subtitle: "Virtual Box + Vagrant + Docker + VS Code = ❤"
 description: "En esta guía mostraré mi combinación para desarollo web basado en Vagrant + Virtual Box + Docker + VS Code Remote SSH"
 categories: ["Desarrollo", "Virtualización", "Docker", "Automatización"]
 tags: ["Docker", "Virtualbox", "Docker", "Visual Studio Code", "Vagrant", "Automatización"]
-images: ["https://s3.us-east-2.amazonaws.com/brunovelazquez.com.bucket/2021-05-03-virtualizacion-anidada/banner.webp"]
+banner: "https://s3.us-east-2.amazonaws.com/brunovelazquez.com.bucket/2021-05-03-virtualizacion-anidada/banner.webp"
 ---
 
 # Introducción

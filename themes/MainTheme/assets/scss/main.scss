@@ -1,18 +1,198 @@
+
 // Custom fonts
 @import url('https://fonts.googleapis.com/css2?family=Mr+Dafoe&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Exo:wght@900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Anton&display=swap');
+
+// 1. Include functions first (so you can manipulate colors, SVGs, calc, etc)
+@import "../libs/bootstrap-5.1.3/scss/functions";
+
+// 2. Include any default variable overrides here
+
+// scss-docs-start gray-color-variables
+$white:    #fff;
+$gray-100: #f8f9fa;
+$gray-200: #e9ecef;
+$gray-300: #dee2e6;
+$gray-400: #ced4da;
+$gray-500: #adb5bd;
+$gray-600: #6c757d;
+$gray-700: #495057;
+$gray-800: #343a40;
+$gray-900: #212529;
+$black:    #000;
+// scss-docs-end gray-color-variables
+
+// scss-docs-start color-variables
+$blue:    #0d6efd;
+$indigo:  #6610f2;
+$purple:  #6f42c1;
+$pink:    #d63384;
+$red:     #dc3545;
+$orange:  #fd7e14;
+$yellow:  #ffc107;
+$green:   #198754;
+$teal:    #20c997;
+$cyan:    #0dcaf0;
+// scss-docs-end color-variables
+
+$blue-100: tint-color($blue, 80%);
+$blue-200: tint-color($blue, 60%);
+$blue-300: tint-color($blue, 40%);
+$blue-400: tint-color($blue, 20%);
+$blue-500: $blue;
+$blue-600: shade-color($blue, 20%);
+$blue-700: shade-color($blue, 40%);
+$blue-800: shade-color($blue, 60%);
+$blue-900: shade-color($blue, 80%);
+
+$indigo-100: tint-color($indigo, 80%);
+$indigo-200: tint-color($indigo, 60%);
+$indigo-300: tint-color($indigo, 40%);
+$indigo-400: tint-color($indigo, 20%);
+$indigo-500: $indigo;
+$indigo-600: shade-color($indigo, 20%);
+$indigo-700: shade-color($indigo, 40%);
+$indigo-800: shade-color($indigo, 60%);
+$indigo-900: shade-color($indigo, 80%);
+
+$purple-100: tint-color($purple, 80%);
+$purple-200: tint-color($purple, 60%);
+$purple-300: tint-color($purple, 40%);
+$purple-400: tint-color($purple, 20%);
+$purple-500: $purple;
+$purple-600: shade-color($purple, 20%);
+$purple-700: shade-color($purple, 40%);
+$purple-800: shade-color($purple, 60%);
+$purple-900: shade-color($purple, 80%);
+
+$pink-100: tint-color($pink, 80%);
+$pink-200: tint-color($pink, 60%);
+$pink-300: tint-color($pink, 40%);
+$pink-400: tint-color($pink, 20%);
+$pink-500: $pink;
+$pink-600: shade-color($pink, 20%);
+$pink-700: shade-color($pink, 40%);
+$pink-800: shade-color($pink, 60%);
+$pink-900: shade-color($pink, 80%);
+
+$red-100: tint-color($red, 80%);
+$red-200: tint-color($red, 60%);
+$red-300: tint-color($red, 40%);
+$red-400: tint-color($red, 20%);
+$red-500: $red;
+$red-600: shade-color($red, 20%);
+$red-700: shade-color($red, 40%);
+$red-800: shade-color($red, 60%);
+$red-900: shade-color($red, 80%);
+
+$orange-100: tint-color($orange, 80%);
+$orange-200: tint-color($orange, 60%);
+$orange-300: tint-color($orange, 40%);
+$orange-400: tint-color($orange, 20%);
+$orange-500: $orange;
+$orange-600: shade-color($orange, 20%);
+$orange-700: shade-color($orange, 40%);
+$orange-800: shade-color($orange, 60%);
+$orange-900: shade-color($orange, 80%);
+
+$yellow-100: tint-color($yellow, 80%);
+$yellow-200: tint-color($yellow, 60%);
+$yellow-300: tint-color($yellow, 40%);
+$yellow-400: tint-color($yellow, 20%);
+$yellow-500: $yellow;
+$yellow-600: shade-color($yellow, 20%);
+$yellow-700: shade-color($yellow, 40%);
+$yellow-800: shade-color($yellow, 60%);
+$yellow-900: shade-color($yellow, 80%);
+
+$green-100: tint-color($green, 80%);
+$green-200: tint-color($green, 60%);
+$green-300: tint-color($green, 40%);
+$green-400: tint-color($green, 20%);
+$green-500: $green;
+$green-600: shade-color($green, 20%);
+$green-700: shade-color($green, 40%);
+$green-800: shade-color($green, 60%);
+$green-900: shade-color($green, 80%);
+
+$teal-100: tint-color($teal, 80%);
+$teal-200: tint-color($teal, 60%);
+$teal-300: tint-color($teal, 40%);
+$teal-400: tint-color($teal, 20%);
+$teal-500: $teal;
+$teal-600: shade-color($teal, 20%);
+$teal-700: shade-color($teal, 40%);
+$teal-800: shade-color($teal, 60%);
+$teal-900: shade-color($teal, 80%);
+
+$cyan-100: tint-color($cyan, 80%);
+$cyan-200: tint-color($cyan, 60%);
+$cyan-300: tint-color($cyan, 40%);
+$cyan-400: tint-color($cyan, 20%);
+$cyan-500: $cyan;
+$cyan-600: shade-color($cyan, 20%);
+$cyan-700: shade-color($cyan, 40%);
+$cyan-800: shade-color($cyan, 60%);
+$cyan-900: shade-color($cyan, 80%);
+
+// scss-docs-start theme-color-variables
+$primary:       $pink-500;
+$secondary:     $cyan-500;
+$success:       $green;
+$info:          $cyan;
+$warning:       $yellow;
+$danger:        $red;
+$light:         $gray-100;
+$dark:          $gray-900;
+// scss-docs-end theme-color-variables
+
+$headings-font-family: 'Anton', sans-serif;
 
 
-// Override scss variables here:
+// 3. Include remainder of required Bootstrap stylesheets
+@import "../libs/bootstrap-5.1.3/scss/variables";
+@import "../libs/bootstrap-5.1.3/scss/mixins";
+@import "../libs/bootstrap-5.1.3/scss/root";
 
-$primary: #ff69c8;
-$secondary: #59c1fe;
+// 4. Include any optional Bootstrap CSS as needed
+@import "../libs/bootstrap-5.1.3/scss/utilities";
+@import "../libs/bootstrap-5.1.3/scss/reboot";
+@import "../libs/bootstrap-5.1.3/scss/type";
+@import "../libs/bootstrap-5.1.3/scss/images";
+@import "../libs/bootstrap-5.1.3/scss/containers";
+@import "../libs/bootstrap-5.1.3/scss/grid";
+@import "../libs/bootstrap-5.1.3/scss/helpers";
+@import "../libs/bootstrap-5.1.3/scss/tables";
+@import "../libs/bootstrap-5.1.3/scss/forms";
+@import "../libs/bootstrap-5.1.3/scss/buttons";
+@import "../libs/bootstrap-5.1.3/scss/transitions";
+@import "../libs/bootstrap-5.1.3/scss/dropdown";
+@import "../libs/bootstrap-5.1.3/scss/button-group";
+@import "../libs/bootstrap-5.1.3/scss/nav";
+@import "../libs/bootstrap-5.1.3/scss/navbar";
+@import "../libs/bootstrap-5.1.3/scss/card";
+@import "../libs/bootstrap-5.1.3/scss/accordion";
+@import "../libs/bootstrap-5.1.3/scss/breadcrumb";
+@import "../libs/bootstrap-5.1.3/scss/pagination";
+@import "../libs/bootstrap-5.1.3/scss/badge";
+@import "../libs/bootstrap-5.1.3/scss/alert";
+@import "../libs/bootstrap-5.1.3/scss/progress";
+@import "../libs/bootstrap-5.1.3/scss/list-group";
+@import "../libs/bootstrap-5.1.3/scss/close";
+@import "../libs/bootstrap-5.1.3/scss/toasts";
+@import "../libs/bootstrap-5.1.3/scss/modal";
+@import "../libs/bootstrap-5.1.3/scss/tooltip";
+@import "../libs/bootstrap-5.1.3/scss/popover";
+@import "../libs/bootstrap-5.1.3/scss/carousel";
+@import "../libs/bootstrap-5.1.3/scss/spinners";
+@import "../libs/bootstrap-5.1.3/scss/offcanvas";
+@import "../libs/bootstrap-5.1.3/scss/placeholders";
 
-// Import bootstrap
-@import "../libs/bootstrap-5.1.3/scss/bootstrap.scss";
+// 5. Optionally include utilities API last to generate classes based on the Sass map in `_utilities.scss`
+@import "../libs/bootstrap-5.1.3/scss/utilities/api";
 
-// Custom classes
-
+// 6. Add additional custom code here
 .feather-16{
     width: 16px;
     height: 16px;
