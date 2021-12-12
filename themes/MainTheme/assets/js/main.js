@@ -30,20 +30,4 @@ document.addEventListener("DOMContentLoaded", () => {
             duration: 1500,
             delay: (el, i) => 45 * i
         });
-
-    anime.timeline({loop: false})
-        .add({
-            targets: '.temp',
-            translateX: ['50px','0px'],
-            easing: 'easeOutExpo',
-            duration: 1000
-        });
-
-    anime.timeline({loop: false})
-        .add({
-            targets: '.temp2',
-            translateX: ['-50px','0px'],
-            easing: 'easeOutExpo',
-            duration: 1000
-        });
 });

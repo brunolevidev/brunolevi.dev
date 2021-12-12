@@ -2,6 +2,7 @@ baseURL = "https://brunovelazquez.com/"
 languageCode = "es-mx"
 theme = "MainTheme"
 title = "Bruno Velázquez"
+defaultContentLanguage = "es"
 
 [menu]
   [[menu.main]]

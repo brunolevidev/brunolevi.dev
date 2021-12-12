@@ -189,10 +189,48 @@ $headings-font-family: 'Anton', sans-serif;
 @import "../libs/bootstrap-5.1.3/scss/offcanvas";
 @import "../libs/bootstrap-5.1.3/scss/placeholders";
 
-// 5. Optionally include utilities API last to generate classes based on the Sass map in `_utilities.scss`
+// 5. Add utility functions
+
+$all-colors: map-merge-multiple($blues, $indigos, $purples, $pinks, $reds, $oranges, $yellows, $greens, $teals, $cyans);
+
+$utilities: map-merge(
+  $utilities,
+  (
+    "color": map-merge(
+      map-get($utilities, "color"),
+      (
+        values: map-merge(
+          map-get(map-get($utilities, "color"), "values"),
+          (
+            $all-colors
+          ),
+        ),
+      ),
+    ),
+  )
+);
+
+$utilities: map-merge(
+  $utilities,
+  (
+    "background-color": map-merge(
+      map-get($utilities, "background-color"),
+      (
+        values: map-merge(
+          map-get(map-get($utilities, "background-color"), "values"),
+          (
+            $all-colors
+          ),
+        ),
+      ),
+    ),
+  )
+);
+
+// 6. Optionally include utilities API last to generate classes based on the Sass map in `_utilities.scss`
 @import "../libs/bootstrap-5.1.3/scss/utilities/api";
 
-// 6. Add additional custom code here
+// 7. Add additional custom code here
 .feather-16{
     width: 16px;
     height: 16px;
@@ -341,4 +379,8 @@ $headings-font-family: 'Anton', sans-serif;
     border-radius: 50%;
     width: 80px;
     height: 80px;
+}
+
+.bv-text-shadow {
+    text-shadow: 3px 7px $red-400;
 }
