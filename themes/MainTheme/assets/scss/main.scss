@@ -147,6 +147,18 @@ $light:         $gray-100;
 $dark:          $gray-900;
 // scss-docs-end theme-color-variables
 
+$grays: (
+  "gray-100": $gray-100,
+  "gray-200": $gray-200,
+  "gray-300": $gray-300,
+  "gray-400": $gray-400,
+  "gray-500": $gray-500,
+  "gray-600": $gray-600,
+  "gray-700": $gray-700,
+  "gray-800": $gray-800,
+  "gray-900": $gray-900
+) !default;
+
 $headings-font-family: 'Anton', sans-serif;
 
 
@@ -191,7 +203,7 @@ $headings-font-family: 'Anton', sans-serif;
 
 // 5. Add utility functions
 
-$all-colors: map-merge-multiple($blues, $indigos, $purples, $pinks, $reds, $oranges, $yellows, $greens, $teals, $cyans);
+$all-colors: map-merge-multiple($blues, $indigos, $purples, $pinks, $reds, $oranges, $yellows, $greens, $teals, $cyans, $grays);
 
 $utilities: map-merge(
   $utilities,
@@ -352,24 +364,6 @@ $utilities: map-merge(
     -webkit-mask-image: linear-gradient(rgba(0,0,0,1), rgba(0,0,0,0) 80%);
 }
 
-.temp {
-    width: 100px;
-    height: 100px;
-    position: absolute;
-    background-color: #00a1ef;
-    right: 0;
-    top: 0;
-}
-
-.temp2 {
-    width: 100px;
-    height: 100px;
-    position: absolute;
-    background-color: #00a1ef;
-    left: 0;
-    top: 0;
-}
-
 .bv-image {
     object-fit: cover;
     object-position: center;
@@ -383,4 +377,11 @@ $utilities: map-merge(
 
 .bv-text-shadow {
     text-shadow: 3px 7px $red-400;
+}
+
+#post-content {
+  img{
+    max-width: 100%;
+    height: auto;
+  }
 }

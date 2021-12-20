@@ -29,77 +29,77 @@
             </div>
           </div>
           <div class="col-lg-4 offset-lg-1 p-0 overflow-hidden shadow-lg d-none d-lg-block">
-              <img class="rounded-lg-3" src="https://s3.us-east-2.amazonaws.com/brunovelazquez.com.bucket/bg-about.webp" alt="profile pic" height="600">
+              <img class="rounded" src="https://s3.us-east-2.amazonaws.com/brunovelazquez.com.bucket/bg-about.webp" alt="profile pic" height="600">
           </div>
     </div>
 </div>
 
-<div class="bg-blue-900 pt-5 pb-5 shadow border-top border-primary">
+<div class="bg-gray-100 pt-5 pb-5 shadow">
     <div class="container">
-        <div class="row">
-            <div class="col-md-6 offset-md-3">
-                <h1 class="text-center text-yellow-400 bv-text-shadow my-5 fw-bold">POST RECIENTES</h1>
-                <p class="lead my-5 text-white-50 fw-bold text-center">Me gusta postear sobre temas relacionados a la ingeniería de software, ciencia de datos, tecnología financiera, internet de las cosas y desarrollo de videojuegos</p>
+        <div class="row align-items-center ">
+            <div class="col-md-4 text-center text-lg-start order-1 order-md-2">
+                <h1 class="text-yellow-400 bv-text-shadow my-5 fw-bold">POST RECIENTES</h1>
+                <p class="fs-4 my-5 text-gray-600 fw-bold">Me gusta postear sobre temas relacionados a la ingeniería de software, ciencia de datos, tecnología financiera, internet de las cosas y desarrollo de videojuegos</p>
+                <a href="/posts" class="btn btn-lg btn-primary fw-bold mb-5">Ver todos los posts</a>
             </div>
-        </div>
-        <div class="row" data-masonry='{"percentPosition": true }'>
-            {{ range first 6 (where .Data.Pages "Section" "posts") }}
-                {{ range .Pages }}
-                    <div class="col-12 col-md-4 my-5">
-                        <div class="card bg-dark rounded shadow border-0">
-                            <img src="{{ .Param "banner" }}" class="card-img-top" alt="{{ .Title }}">
-                            <div class="card-body p-5">
-                            <h5 class="card-title">{{ .Title }}</h5>
-                            <span>{{.Date.Day}} {{i18n .Date.Month}} {{.Date.Year}}</span>
-                            <p class="card-text">{{ .Description }}</p>
-                            <a href="{{ .Permalink }}" class="btn btn-lg btn-primary fw-bold">Leer post</a>
+            <div class="col-md-8 order-2 order-md-1">
+                <div class="row" data-masonry='{"percentPosition": true }'>
+                    {{ range first 6 (where .Data.Pages "Section" "posts") }}
+                        {{ range .Pages }}
+                            <div class="col-12 col-md-6 my-2">
+                                <div class="card bg-dark rounded border-0">
+                                    <img src="{{ .Param "banner" }}" class="card-img-top" alt="{{ .Title }}">
+                                    <div class="card-body p-5">
+                                    <h5 class="card-title">{{ .Title }}</h5>
+                                    {{ partial "metadata.html" . }}
+                                    <p class="card-text mt-3">{{ .Description }}</p>
+                                    <a href="{{ .Permalink }}" class="btn btn-lg btn-primary fw-bold">Leer post</a>
+                                    </div>
+                                </div>
                             </div>
-                        </div>
-                    </div>
-                {{ end }}
-            {{ end }}
+                        {{ end }}
+                    {{ end }}
+                </div>
+            </div>
         </div>
     </div>
 </div>
 
-<div class="pt-5 pb-5 shadow border-top border-secondary">
+<div class="pt-5 pb-5">
     <div class="container">
-        <div class="row">
-            <div class="col-md-6 offset-md-3">
-                <h1 class="text-center text-yellow-400 bv-text-shadow my-5 fw-bold">PROYECTOS</h1>
-                <p class="lead my-5 text-white-50 fw-bold text-center">Me especializo en llevar tu negocio a lo digital, en las comunicaciones en tiempo real, la integración y distribución continuas</p>
+        <div class="row align-items-center">
+            <div class="col-md-6 text-center text-lg-start">
+                <h1 class="text-yellow-400 bv-text-shadow my-5 fw-bold">PROYECTOS</h1>
+                <p class="fs-4 my-5 text-white-50 fw-bold">Me especializo en llevar tu negocio a lo digital, crear estrategias de negocio para incrementar tus ventas y generar mejores rendimientos.</p>
+                <a href="/projects" class="btn btn-lg btn-secondary fw-bold mb-5">Ver todos los proyectos</a>
             </div>
-        </div>
-        <div class="row" data-masonry='{"percentPosition": true }'>
-            {{ range first 3 (where .Data.Pages "Section" "projects") }}
-                {{ range .Pages }}
-                    <div class="col-12 col-md-4 my-5">
-                        <div class="card bg-primary rounded shadow border-0">
-                            <div class="card-body p-5">
-                            <h5 class="card-title">{{ .Title }}</h5>
-                            <span>{{.Date.Day}} {{i18n .Date.Month}} {{.Date.Year}}</span>
-                            <p class="card-text">{{ .Description }}</p>
-                            <a href="{{ .Permalink }}" class="btn btn-lg btn-secondary fw-bold">Ver proyecto</a>
+            <div class="col-md-6">
+                <div class="row">
+                    {{ range first 3 (where .Data.Pages "Section" "projects") }}
+                        {{ range .Pages }}
+                            <div class="col-12 my-2">
+                                <div class="card bg-primary rounded border-0 ">
+                                    <div class="card-body p-5">
+                                    <h5 class="card-title">{{ .Title }}</h5>
+                                    {{ partial "metadata.html" . }}
+                                    <p class="card-text">{{ .Description }}</p>
+                                    <a href="{{ .Permalink }}" class="btn btn-lg btn-secondary fw-bold">Ver proyecto</a>
+                                    </div>
+                                </div>
                             </div>
-                        </div>
-                    </div>
-                {{ end }}
-            {{ end }}
+                        {{ end }}
+                    {{ end }}
+                </div>
+            </div>
         </div>
     </div>
 </div>
 
-<div class="pt-5 pb-5 shadow border-top border-primary bg-purple-900">
-    <div class="container">
-        <div class="row">
-            <div class="col-md-6 offset-md-3">
-                <h1 class="text-center text-yellow-400 bv-text-shadow my-5 fw-bold">CONTACTO</h1>
-                <p class="lead my-5 text-white-50 fw-bold text-center">Si deseas que dé alguna charla o contratarme para tu proyecto puedes escribirme en el siguiente formulario</p>
-            </div>
-        </div>
-        <div class="row" data-masonry='{"percentPosition": true }'>
-            <div class="col-12 col-md-6 offset-md-3 my-5 text-primary fw-bold">
-                <form action="" method="post" enctype="application/x-www-form-urlencoded">
+<div class="bg-purple-900 shadow">
+    <div class="container px-5 py-5">
+        <div class="row align-items-center g-lg-5 py-5">
+            <div class="col-md-10 mx-auto col-lg-5 order-2 order-md-1">
+                <form action="" method="post" enctype="application/x-www-form-urlencoded" class="text-primary fw-bold">
                     <div class="form-floating mb-3">
                         <input type="text" class="form-control" id="nombreInput" placeholder="Juan Pérez">
                         <label for="floatingInput">Nombre</label>
@@ -117,9 +117,23 @@
                         <label for="comentarioInput">Comentarios</label>
                     </div>
                     <div class="d-grid">
-                        <button type="submit" class="btn btn-lg btn-primary btn-">Enviar</button>
+                        <button type="submit" class="btn btn-lg btn-primary">Enviar</button>
                     </div>
                 </form>
+            </div>
+            <div class="col-lg-7 text-center text-lg-start order-1 order-md-2">
+                <h1 class="text-yellow-400 bv-text-shadow my-5 fw-bold">CONTACTO</h1>
+                <p class="fs-4 text-white-50 fw-bold">Si deseas que dé alguna charla o contratarme para tu proyecto puedes escribirme en el formulario. También puedes seguir mi trayectoria a través de mis redes sociales</p>
+                <div class="d-flex justify-content-center align-items-center justify-content-md-start my-5">
+                    {{ range .Site.Menus.social }}
+                    <a class="mx-2" href="{{ .URL }}" target="_blank">
+                        {{ if .Pre }}
+                            {{ $icon :=  printf "<i class=\"feather-24\" data-feather=\"%s\"></i> " .Pre | safeHTML }}
+                            {{ $icon }}
+                        {{ end }}
+                    </a>
+                    {{ end }}
+                </div>
             </div>
         </div>
     </div>
