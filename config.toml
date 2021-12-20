@@ -15,11 +15,6 @@ defaultContentLanguage = "es"
     pre = ""
     url = "/posts/"
     weight = 2
-  [[menu.main]]
-    name = "Tags"
-    pre = ""
-    url = "/tags/"
-    weight = 3
   [[menu.social]]
     name = "Github"
     pre = "github"
