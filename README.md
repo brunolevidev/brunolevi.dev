@@ -14,7 +14,10 @@ cd ~
 ```
 
 Then use curl to retrieve the tarball, making sure to replace the highlighted URL with the one you just copied. The -O flag ensures that this outputs to a file, and the L flag instructs HTTPS redirects, since this link was taken from the Go website and will redirect here before the file downloads:
-```curl -OL https://go.dev/dl/go1.17.3.linux-amd64.tar.gz```
+
+```bash
+curl -OL https://go.dev/dl/go1.17.3.linux-amd64.tar.gz
+```
 
 To verify the integrity of the file you downloaded, run the sha256sum command and pass it to the filename as an argument:
 
@@ -70,4 +73,32 @@ Then serve:
 
 ```bash
 hugo server -D
+```
+
+## To deploy
+
+Change home directory
+
+```bash
+cd ~
+```
+
+Clone or pull repository:
+
+```bash
+git clone https://github.com/BrunoVelazquez/brunovelazquez.com.git
+or
+git pull origin
+```
+
+Build site:
+
+```bash
+hugo -b https://brunovelazquez.com -e production
+```
+
+Copy public directory:
+
+```bash
+cd public && cp . /var/www/brunovelazquez.com
 ```
