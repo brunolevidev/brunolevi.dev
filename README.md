@@ -100,5 +100,5 @@ hugo -b https://brunovelazquez.com -e production
 Copy public directory:
 
 ```bash
-cd public && cp . /var/www/brunovelazquez.com
+cd public && sudo cp . -r /var/www/brunovelazquez.com
 ```
