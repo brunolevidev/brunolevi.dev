@@ -22,7 +22,7 @@
                     <h1 class="display-5 fw-bold lh-1 text-yellow-400 bv-text-shadow">Ingeniero en Desarrollo de Software</h1>
                 </div>
             </div>
-            <p class="lead my-5 text-white-50 fw-bold">Orgullosamente del Estado de Morelos, especializado en construir soluciones de software integrales para tu negocio o empresa. Aficionado en el desarrollo de videojuegos e internet de las cosas.</p>
+            <p class="lead my-5 text-white-50 fw-bold">Orgullosamente del Estado de Morelos, especializado en construir soluciones de software integrales para tu negocio o empresa. Aficionado en el desarrollo de videojuegos e internet de las cosas</p>
             <div class="d-grid gap-2 d-md-flex justify-content-md-start mb-4 mb-lg-3">
               <a href="#contact" class="btn btn-primary btn-lg px-4 me-md-2 fw-bold">Contactar</a>
               <a href="#projects" class="btn btn-outline-secondary btn-lg px-4">Ver portafolio</a>
@@ -70,20 +70,21 @@
         <div class="row align-items-center">
             <div class="col-md-6 text-center text-lg-start">
                 <h1 class="text-yellow-400 bv-text-shadow my-5 fw-bold">PROYECTOS</h1>
-                <p class="fs-4 my-5 text-white-50 fw-bold">Me especializo en llevar tu negocio a lo digital, crear estrategias de negocio para incrementar tus ventas y generar mejores rendimientos.</p>
-                <a href="/projects" class="btn btn-lg btn-secondary fw-bold mb-5">Ver todos los proyectos</a>
+                <p class="fs-4 my-5 text-white-50 fw-bold">Me especializo en llevar tu negocio a lo digital, crear estrategias de negocio para incrementar tus ventas y generar mejores rendimientos</p>
+                <!-- <a href="/projects" class="btn btn-lg btn-secondary fw-bold mb-5">Ver todos los proyectos</a> -->
             </div>
             <div class="col-md-6">
-                <div class="row">
-                    {{ range first 3 (where .Data.Pages "Section" "projects") }}
+                <div class="row" data-masonry='{"percentPosition": true }'>
+                    {{ range first 1 (where .Data.Pages "Section" "projects") }}
                         {{ range .Pages }}
-                            <div class="col-12 my-2">
-                                <div class="card bg-primary rounded border-0 ">
-                                    <div class="card-body p-5">
-                                    <h5 class="card-title">{{ .Title }}</h5>
-                                    {{ partial "metadata.html" . }}
-                                    <p class="card-text">{{ .Description }}</p>
-                                    <a href="{{ .Permalink }}" class="btn btn-lg btn-secondary fw-bold">Ver proyecto</a>
+                            <div class="col-12 col-md-6 my-2">
+                                <div class="card bg-dark text-white rounded border-0 ">
+                                    <img src="{{ .Param "banner" }}" class="card-img project-img rounded" alt="{{ .Title }}">
+                                    <div class="card-img-overlay bg-purple-900 opacity-75"></div>
+                                    <div class="card-img-overlay p-5">
+                                        <h5 class="card-title">{{ .Title }}</h5>
+                                        <p class="card-text">{{ .Description }}</p>
+                                        <button type="button" class="btn btn-secondary fw-bold" data-bs-toggle="modal" data-bs-target="#project-{{ .File.TranslationBaseName }}">Ver proyecto</button>
                                     </div>
                                 </div>
                             </div>
@@ -94,6 +95,31 @@
         </div>
     </div>
 </div>
+
+{{ range first 1 (where .Data.Pages "Section" "projects") }}
+    {{ range .Pages }}
+        <!-- Modal -->
+        <div class="modal fade" id="project-{{ .File.TranslationBaseName }}" tabindex="-1" aria-labelledby="{{ .Title }}Label" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content bg-dark">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">{{ .Title }}</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <p>
+                            {{ .Description }}
+                        </p>
+                        <img src="{{ .Param "banner" }}" class="img-fluid" alt="{{ .Title }}">
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {{ end }}
+{{ end }}
 
 <div class="bg-purple-900 shadow" id="contact">
     <div class="container px-5 py-5">
