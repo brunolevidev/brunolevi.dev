@@ -1,7 +1,7 @@
 ---
 title: "Empresando"
 date: 2016-12-01
-draft: true
+draft: false
 
 description: "Desarrollo de landing page para registro de la organización Empresando. Su objetivo es conectar a pequeños emprendedores para hacer crecer sus PYMES"
 categories: []
