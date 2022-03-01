@@ -1,16 +1,6 @@
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark shadow">
     <div class="container">
-        <a class="navbar-brand" href="/">BV</a>
-        <div class="d-flex justify-content-center align-items-center">
-            {{ range .Site.Menus.social }}
-            <a class="mx-2" href="{{ .URL }}" target="_blank">
-                {{ if .Pre }}
-                    {{ $icon :=  printf "<i class=\"feather-16\" data-feather=\"%s\"></i> " .Pre | safeHTML }}
-                    {{ $icon }}
-                {{ end }}
-            </a>
-            {{ end }}
-        </div>
+        <a class="navbar-brand" href="/">Bruno Velázquez</a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>

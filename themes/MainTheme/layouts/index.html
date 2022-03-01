@@ -1,65 +1,47 @@
 {{ define "main" }}
-<div class="bv-header-container shadow">
-    <div class="bv-body-container">
-        <div class="bv-grid"></div>
-        <div class="bv-lines"></div>
-        <h1 class="bv-header-h1">
-            <span id="bruno">BRUNO</span>
-            <span id="bruno-shadow">BRUNO</span>
-        </h1>
-        <h2 class="bv-header-h2">Velázquez</h2>
-    </div>
-</div>
-
-<div class="container my-5">
-    <div class="row align-items-center rounded-3">
-        <div class="col-lg-7 p-5">
-            <div class="d-flex justify-content-center align-items-top">
-                <div class="flex-shrink-0">
-                    <img class="bv-profile-pic bv-image shadow-lg" src="https://s3.us-east-2.amazonaws.com/brunovelazquez.com.bucket/IMG_20211017_174717_117.webp" alt="profile pic">
-                </div>
-                <div class="ms-3">
-                    <h1 class="display-5 fw-bold lh-1 text-yellow-400 bv-text-shadow">Ingeniero en Desarrollo de Software</h1>
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-12 col-md-6">
+            <div class="mt-5">
+                <div class="bv-header-container rounded shadow">
+                    <div class="bv-body-container">
+                        <div class="bv-grid"></div>
+                        <div class="bv-lines"></div>
+                        <h1 class="bv-header-h1">
+                            <span id="bruno">BRUNO</span>
+                            <span id="bruno-shadow">BRUNO</span>
+                        </h1>
+                        <h2 class="bv-header-h2">Velázquez</h2>
+                    </div>
                 </div>
             </div>
-            <p class="lead my-5 text-white-50 fw-bold">Orgullosamente del Estado de Morelos, especializado en construir soluciones de software integrales para tu negocio o empresa. Aficionado en el desarrollo de videojuegos e internet de las cosas</p>
-            <div class="d-grid gap-2 d-md-flex justify-content-md-start mb-4 mb-lg-3">
-              <a href="#contact" class="btn btn-primary btn-lg px-4 me-md-2 fw-bold">Contactar</a>
-              <a href="#projects" class="btn btn-outline-secondary btn-lg px-4">Ver portafolio</a>
-            </div>
-          </div>
-          <div class="col-lg-4 offset-lg-1 p-0 overflow-hidden shadow-lg d-none d-lg-block">
-              <img class="rounded" src="https://s3.us-east-2.amazonaws.com/brunovelazquez.com.bucket/bg-about.webp" alt="profile pic" height="600">
-          </div>
-    </div>
-</div>
-
-<div class="bg-gray-100 pt-5 pb-5 shadow">
-    <div class="container">
-        <div class="row align-items-center ">
-            <div class="col-md-4 text-center text-lg-start order-1 order-md-2">
-                <h1 class="text-yellow-400 bv-text-shadow my-5 fw-bold">POST RECIENTES</h1>
-                <p class="fs-4 my-5 text-gray-600 fw-bold">Me gusta postear sobre temas relacionados a la ingeniería de software, ciencia de datos, tecnología financiera, internet de las cosas y desarrollo de videojuegos</p>
-                <a href="/posts" class="btn btn-lg btn-primary fw-bold mb-5">Ver todos los posts</a>
-            </div>
-            <div class="col-md-8 order-2 order-md-1">
-                <div class="row" data-masonry='{"percentPosition": true }'>
-                    {{ range first 6 (where .Data.Pages "Section" "posts") }}
-                        {{ range .Pages }}
-                            <div class="col-12 col-md-6 my-2">
-                                <div class="card bg-dark rounded border-0">
-                                    <img src="{{ .Param "banner" }}" class="card-img-top" alt="{{ .Title }}">
-                                    <div class="card-body p-5">
-                                    <h5 class="card-title">{{ .Title }}</h5>
-                                    {{ partial "metadata.html" . }}
-                                    <p class="card-text mt-3">{{ .Description }}</p>
-                                    <a href="{{ .Permalink }}" class="btn btn-lg btn-primary fw-bold">Leer post</a>
-                                    </div>
-                                </div>
-                            </div>
+            <div class="mt-5">
+                <h1 class="fs-3 fw-bold">Ingeniero en Desarrollo de Software</h1>
+                <p class="lead text-white-50">Orgullosamente del Estado de Morelos, especializado en construir soluciones de software integrales para tu negocio o empresa.</p>
+                <div class="d-flex justify-content-start align-items-center">
+                    {{ range .Site.Menus.social }}
+                    <a class="me-2" href="{{ .URL }}" target="_blank">
+                        {{ if .Pre }}
+                            {{ $icon :=  printf "<i class=\"feather-16\" data-feather=\"%s\"></i> " .Pre | safeHTML }}
+                            {{ $icon }}
                         {{ end }}
+                    </a>
                     {{ end }}
                 </div>
+            </div>
+            <div class="mt-5">
+                {{ range first 6 (where .Data.Pages "Section" "posts") }}
+                {{ range .Pages }}
+                    <div class="card bg-gray-800 rounded border-0 mb-4">
+                        <div class="card-body p-5">
+                        <h5 class="card-title fw-bold">{{ .Title }}</h5>
+                        {{ partial "metadata.html" . }}
+                        <p class="card-text mt-3">{{ .Description }}</p>
+                        <a href="{{ .Permalink }}" class="btn btn-primary">Más información</a>
+                        </div>
+                    </div>
+                {{ end }}
+            {{ end }}
             </div>
         </div>
     </div>
