@@ -1,11 +1,29 @@
 {{ define "main" }}
-<div class="container my-5">
+<div class="container">
     <div class="row justify-content-center">
         <div class="col-12 col-md-6" id="post-content">
-            <h1>{{ .Title }}</h1>
-            {{ partial "metadata.html" . }}
-            <br><br>
-            {{ .Content }}
+            <section id="main">
+                {{- with $.Params.images -}}
+                {{- range first 6 . }}
+                    <img src="{{ . | absURL }}" class="img-fluid mt-5 mb-3 rounded" />
+                {{ end -}}
+                {{- end -}}
+                <h1 id="title" class="fw-bold">{{ .Title }}</h1>
+                {{ partial "metadata.html" . }}
+                <div class="mt-5">
+                    <article id="content" class="post-content">
+                        {{ .Content }}
+                    </article>
+                </div>
+            </section>
+            <div class="d-flex justify-content-between">
+                {{ with .PrevInSection }}
+                  <a class="btn btn-primary" href="{{.Permalink}}"><i data-feather="chevrons-left" class="feather-16"></i></a>
+                {{ end }}
+                {{ with .NextInSection }}
+                  <a class="btn btn-primary" href="{{.Permalink}}"><i data-feather="chevrons-right" class="feather-16"></i></a>
+                {{ end }}
+            </div>
         </div>
     </div>
 </div>

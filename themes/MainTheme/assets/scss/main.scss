@@ -381,3 +381,24 @@ $utilities: map-merge(
     transform: rotateX(-100deg);
     -webkit-mask-image: linear-gradient(rgba(0,0,0,1), rgba(0,0,0,0) 80%);
 }
+
+.post-content>p>img {
+  width: 100%;
+  height: auto;
+}
+
+
+@for $i from 1 through 6 {
+  .post-content>h#{$i}{
+    font-weight: bold;
+    &:before {
+      color: $secondary;
+      content: "#";
+      margin-right: 8px;
+    }
+  }
+}
+
+.post-content>p {
+  color: $gray-500;
+}

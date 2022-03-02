@@ -24,7 +24,7 @@
                 </p>
                 <div class="d-flex justify-content-start align-items-center">
                     {{ range .Site.Menus.social }}
-                    <a class="me-2 text-white" href="{{ .URL }}" target="_blank">
+                    <a class="me-2 text-primary" href="{{ .URL }}" target="_blank">
                         {{ if .Pre }}
                             {{ $icon :=  printf "<i class=\"feather-24\" data-feather=\"%s\"></i> " .Pre | safeHTML }}
                             {{ $icon }}
