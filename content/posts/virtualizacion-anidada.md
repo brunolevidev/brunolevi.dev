@@ -3,11 +3,11 @@ title: "Virtualización anidada"
 date: 2021-05-03
 draft: false
 
-subtitle: "Virtual Box + Vagrant + Docker + VS Code = ❤"
 description: "En esta guía mostraré mi combinación para desarollo web basado en Vagrant + Virtual Box + Docker + VS Code Remote SSH"
 categories: ["Desarrollo", "Virtualización", "Docker", "Automatización"]
 tags: ["Docker", "Virtualbox", "Docker", "Visual Studio Code", "Vagrant", "Automatización"]
-banner: "https://s3.us-east-2.amazonaws.com/brunovelazquez.com.bucket/2021-05-03-virtualizacion-anidada/banner.webp"
+images:
+- "https://s3.us-east-2.amazonaws.com/brunovelazquez.com.bucket/2021-05-03-virtualizacion-anidada/banner.webp"
 ---
 
 # Introducción

@@ -137,8 +137,8 @@ $cyan-800: shade-color($cyan, 60%);
 $cyan-900: shade-color($cyan, 80%);
 
 // scss-docs-start theme-color-variables
-$primary:       $purple;
-$secondary:     $red-500;
+$primary:       $red-500;
+$secondary:     $purple-500;
 $success:       $green;
 $info:          $cyan;
 $warning:       $yellow;
@@ -159,8 +159,20 @@ $grays: (
   "gray-900": $gray-900
 ) !default;
 
-//$headings-font-family: 'Anton', sans-serif;
+// Replace variables
 $font-family-sans-serif:'Roboto', sans-serif;
+$pagination-bg: $gray-800;
+$pagination-color: $white;
+$pagination-border-color: $gray-800;
+$pagination-focus-bg: $gray-800;
+$pagination-focus-bg: $primary;
+$pagination-hover-bg: $gray-800;
+$pagination-hover-color: $primary;
+$pagination-hover-border-color: $gray-800;
+$pagination-active-bg: $primary;
+$pagination-disabled-color: $gray-600;
+$pagination-disabled-bg: $gray-800;
+$pagination-disabled-border-color: $gray-800;
 
 // 3. Include remainder of required Bootstrap stylesheets
 @import "../libs/bootstrap-5.1.3/scss/variables";
@@ -243,6 +255,7 @@ $utilities: map-merge(
 @import "../libs/bootstrap-5.1.3/scss/utilities/api";
 
 // 7. Add additional custom code here
+
 .feather-12{
   width: 12px;
   height: 12px;
@@ -367,32 +380,4 @@ $utilities: map-merge(
     bottom: -1200px;
     transform: rotateX(-100deg);
     -webkit-mask-image: linear-gradient(rgba(0,0,0,1), rgba(0,0,0,0) 80%);
-}
-
-.bv-image {
-    object-fit: cover;
-    object-position: center;
-}
-
-.bv-profile-pic {
-    border-radius: 50%;
-    width: 80px;
-    height: 80px;
-}
-
-.bv-text-shadow {
-    text-shadow: 3px 7px $red-400;
-}
-
-#post-content {
-  img{
-    max-width: 100%;
-    height: auto;
-  }
-}
-
-.project-img {
-  object-fit: cover;
-  object-position: top;
-  height: 350px;
 }

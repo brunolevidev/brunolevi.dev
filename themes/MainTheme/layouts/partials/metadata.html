@@ -5,6 +5,6 @@
 <i data-feather="tag" class="feather-12"></i>
 {{ range . }}
 {{ $href := print (absURL "tags/") (urlize .) }}
-<a href="{{ $href }}"><span class="badge bg-secondary">{{ . }}</span></a>
+<a href="{{ $href }}"><span class="badge bg-gray-900">{{ . }}</span></a>
 {{ end }}
 {{ end }}

@@ -4,17 +4,19 @@ theme = "MainTheme"
 title = "Bruno Velázquez"
 defaultContentLanguage = "es"
 
+[params]
+  description = "Soy del Estado de Morelos, México y me especializo en desarrollar soluciones integrales para tu negocio o empresa"
+  images = ["https://s3.us-east-2.amazonaws.com/brunovelazquez.com.bucket/bg-about.webp"]
+  title = "Bruno Velázquez"
+[taxonomies]
+  tags = "tags"
+
 [menu]
   [[menu.main]]
     name = "Home"
     pre = ""
     url = "/"
     weight = 1
-  [[menu.main]]
-    name = "Posts"
-    pre = ""
-    url = "/posts/"
-    weight = 2
   [[menu.social]]
     name = "Github"
     pre = "github"
@@ -30,3 +32,8 @@ defaultContentLanguage = "es"
     pre = "twitter"
     url = "https://twitter.com/brunovelazquez_"
     weight = 3
+  [[menu.social]]
+    name = "Email"
+    pre = "mail"
+    url = "mailto:contacto@brunovelazquez.com"
+    weight = 4
