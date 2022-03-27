@@ -1,0 +1,188 @@
+<!doctype html><html><head>
+<meta charset=utf-8>
+<meta name=viewport content="width=device-width,initial-scale=1">
+<link rel=stylesheet href=https://brunovelazquez.com/scss/main.min.590decf5a069ee98c560e5fd0b98e2be1fea42c928565e02161476fa996ff6a9.css>
+<title>Bruno Velázquez | Virtualización anidada</title>
+<meta name=twitter:card content="summary_large_image">
+<meta name=twitter:image content="https://s3.us-east-2.amazonaws.com/brunovelazquez.com.bucket/2021-05-03-virtualizacion-anidada/banner.webp">
+<meta name=twitter:title content="Virtualización anidada">
+<meta name=twitter:description content="En esta guía mostraré mi combinación para desarollo web basado en Vagrant + Virtual Box + Docker + VS Code Remote SSH">
+<meta property="og:title" content="Virtualización anidada">
+<meta property="og:description" content="En esta guía mostraré mi combinación para desarollo web basado en Vagrant + Virtual Box + Docker + VS Code Remote SSH">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://brunovelazquez.com/posts/virtualizacion-anidada/"><meta property="og:image" content="https://s3.us-east-2.amazonaws.com/brunovelazquez.com.bucket/2021-05-03-virtualizacion-anidada/banner.webp"><meta property="article:section" content="posts">
+<meta property="article:published_time" content="2021-05-03T00:00:00+00:00">
+<meta property="article:modified_time" content="2021-05-03T00:00:00+00:00"><meta property="og:site_name" content="Bruno Velázquez">
+</head><body class="bg-dark text-white"><nav class="navbar navbar-expand-lg navbar-dark bg-dark shadow">
+<div class=container>
+<a class=navbar-brand href=/>Bruno Velázquez</a>
+<button class=navbar-toggler type=button data-bs-toggle=collapse data-bs-target=#navbarSupportedContent aria-controls=navbarSupportedContent aria-expanded=false aria-label="Toggle navigation">
+<span class=navbar-toggler-icon></span>
+</button>
+<div class="collapse navbar-collapse" id=navbarSupportedContent>
+<ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+<li class=nav-item>
+<a class=nav-link href=/>
+Home
+</a>
+</li>
+</ul>
+</div>
+</div>
+</nav><div id=content>
+<div class=container>
+<div class="row justify-content-center">
+<div class="col-12 col-md-6" id=post-content>
+<section id=main>
+<img src=https://s3.us-east-2.amazonaws.com/brunovelazquez.com.bucket/2021-05-03-virtualizacion-anidada/banner.webp class="img-fluid mt-5 mb-3 rounded">
+<h1 id=title class=fw-bold>Virtualización anidada</h1>
+<i data-feather=calendar class="feather-12 text-white-50"></i>
+<time datetime=03-05-2021 class=text-white-50>3 Mayo 2021</time>
+<i data-feather=tag class="feather-12 text-white-50"></i>
+<a href=https://brunovelazquez.com/tags/docker><span class="badge bg-gray-900 text-white-50">Docker</span></a>
+<a href=https://brunovelazquez.com/tags/virtualbox><span class="badge bg-gray-900 text-white-50">Virtualbox</span></a>
+<a href=https://brunovelazquez.com/tags/docker><span class="badge bg-gray-900 text-white-50">Docker</span></a>
+<a href=https://brunovelazquez.com/tags/visual-studio-code><span class="badge bg-gray-900 text-white-50">Visual Studio Code</span></a>
+<a href=https://brunovelazquez.com/tags/vagrant><span class="badge bg-gray-900 text-white-50">Vagrant</span></a>
+<a href=https://brunovelazquez.com/tags/automatizaci%C3%B3n><span class="badge bg-gray-900 text-white-50">Automatización</span></a>
+<div class=mt-5>
+<article id=content class=post-content>
+<h1 id=introducción>Introducción</h1>
+<p>Windows 10 es un excelente sistema operativo por su gran catálogo de software a nuestra disposición, sin embargo, en el ámbito del desarrollo de software no me convence del todo PowerShell o CMD porque ya me acostumbré demasiado al uso de bash o zsh.</p>
+<p>Si bien existen alternativas como WSL o el uso de dual boot, considero que no cumple con mis necesidades y no es tan ágil del todo. En esta guía mostraré como tengo mi entorno de desarrollo web utilizando Virtual Box, Vagrant, Ubuntu 20.04 y Docker para una virtualización anidada y automatizada.</p>
+<h1 id=requisitos>Requisitos</h1>
+<ul>
+<li>Tener instalado Virtual Box</li>
+<li>Tener instalado Vagrant</li>
+<li>Tener activada la virtualización en la BIOS</li>
+<li>Tener una computadora que pueda tener varias virtualizaciones activas</li>
+</ul>
+<h1 id=instalación-y-configuración>Instalación y configuración</h1>
+<p>El procedimiento es bastante sencillo, a continuación mostraré los pasos a seguir.</p>
+<h2 id=pull-de-la-imagen-de-ubuntu-2004-y-provisionamiento>Pull de la imagen de Ubuntu 20.04 y provisionamiento</h2>
+<p>El archivo <code>.vagrantfile</code> es el punto de entrada para que Vagrant pueda crear, provisionar y configurar la máquina virtual, por lo tanto, debemos crearlo.</p>
+<p>Esta es una configuración inicial que te ayudará a comprender un poco mejor el archivo <code>.vagrantfile</code></p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-ruby data-lang=ruby><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 1</span>Vagrant<span style=color:#ff79c6>.</span>configure(<span style=color:#f1fa8c>&#34;2&#34;</span>) <span style=color:#ff79c6>do</span> <span style=color:#ff79c6>|</span>config<span style=color:#ff79c6>|</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 2</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 3</span>    <span style=color:#6272a4># Esta línea permite configurar la imágen del sistema operativo, podemos encontrarlas en: https://app.vagrantup.com/boxes/search</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 4</span>    config<span style=color:#ff79c6>.</span>vm<span style=color:#ff79c6>.</span>box <span style=color:#ff79c6>=</span> <span style=color:#f1fa8c>&#34;ubuntu/focal64&#34;</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 5</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 6</span>    <span style=color:#6272a4># Permite abrir un puerto para su uso. guest es la máquina virtual y host la máquina física</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 7</span>    config<span style=color:#ff79c6>.</span>vm<span style=color:#ff79c6>.</span>network <span style=color:#f1fa8c>&#34;forwarded_port&#34;</span>, <span style=color:#f1fa8c>guest</span>: <span style=color:#bd93f9>80</span>, <span style=color:#f1fa8c>host</span>: <span style=color:#bd93f9>80</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 8</span>    
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 9</span>    <span style=color:#6272a4># Permite abrir una ip pública dentro de tu red, esto lo puedes cambiar a private_network:</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">10</span>    config<span style=color:#ff79c6>.</span>vm<span style=color:#ff79c6>.</span>network <span style=color:#f1fa8c>&#34;public_network&#34;</span>, <span style=color:#f1fa8c>ip</span>: <span style=color:#f1fa8c>&#34;192.168.0.13&#34;</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">11</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">12</span>    config<span style=color:#ff79c6>.</span>vm<span style=color:#ff79c6>.</span>provider <span style=color:#f1fa8c>&#34;virtualbox&#34;</span> <span style=color:#ff79c6>do</span> <span style=color:#ff79c6>|</span>vb<span style=color:#ff79c6>|</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">13</span>    <span style=color:#6272a4># Al utiliazr la versión CLI de Linux no usaremos GUI</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">14</span>        vb<span style=color:#ff79c6>.</span>gui <span style=color:#ff79c6>=</span> <span style=color:#ff79c6>false</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">15</span>  
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">16</span>    <span style=color:#6272a4># Personalizar la cantidad de memoria de la máquina virtual</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">17</span>        vb<span style=color:#ff79c6>.</span>memory <span style=color:#ff79c6>=</span> <span style=color:#f1fa8c>&#34;2048&#34;</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">18</span>    <span style=color:#ff79c6>end</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">19</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">20</span>    <span style=color:#6272a4># Provisionamiento de la máquina virtial, es decir, este script se ejecutará cuando inicies la máquina por primera vez</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">21</span>    <span style=color:#6272a4># Si deseas instalar software adicional o realizar configuraciones adicionales hazlo desde aquí</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">22</span>    <span style=color:#6272a4># Aquí no es necesario usar el prefijo sudo</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">23</span>    config<span style=color:#ff79c6>.</span>vm<span style=color:#ff79c6>.</span>provision <span style=color:#f1fa8c>&#34;shell&#34;</span>, <span style=color:#f1fa8c>inline</span>: <span style=color:#f1fa8c>&lt;&lt;-SHELL
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">24</span><span style=color:#f1fa8c></span>        apt<span style=color:#ff79c6>-</span>get update
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">25</span>        apt<span style=color:#ff79c6>-</span>get dist<span style=color:#ff79c6>-</span>upgrade <span style=color:#ff79c6>-</span>y
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">26</span>        apt<span style=color:#ff79c6>-</span>get install <span style=color:#ff79c6>-</span>y build<span style=color:#ff79c6>-</span>essential
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">27</span>        apt<span style=color:#ff79c6>-</span>get install <span style=color:#ff79c6>-</span>y gcc g<span style=color:#ff79c6>++</span> make libc6
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">28</span>        apt<span style=color:#ff79c6>-</span>get install <span style=color:#ff79c6>-</span>y subversion cvs mercurial git
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">29</span>        apt<span style=color:#ff79c6>-</span>get install <span style=color:#ff79c6>-</span>y software<span style=color:#ff79c6>-</span>properties<span style=color:#ff79c6>-</span>common
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">30</span>        apt<span style=color:#ff79c6>-</span>get install <span style=color:#ff79c6>-</span>y curl wget htop ntp nmap
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">31</span>        apt<span style=color:#ff79c6>-</span>get install <span style=color:#ff79c6>-</span>y net<span style=color:#ff79c6>-</span>tools
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">32</span>        apt<span style=color:#ff79c6>-</span>get update
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">33</span>        apt<span style=color:#ff79c6>-</span>get install <span style=color:#ff79c6>-</span>y apt<span style=color:#ff79c6>-</span>transport<span style=color:#ff79c6>-</span>https ca<span style=color:#ff79c6>-</span>certificates curl gnupg lsb<span style=color:#ff79c6>-</span>release
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">34</span>        curl <span style=color:#ff79c6>-</span>fsSL <span style=color:#f1fa8c>https</span>:<span style=color:#f1fa8c>//</span>download<span style=color:#ff79c6>.</span>docker<span style=color:#ff79c6>.</span>com<span style=color:#ff79c6>/</span>linux<span style=color:#ff79c6>/</span>ubuntu<span style=color:#ff79c6>/</span>gpg <span style=color:#ff79c6>|</span> sudo gpg <span style=color:#ff79c6>--</span>dearmor <span style=color:#ff79c6>-</span>o <span style=color:#f1fa8c>/usr/s</span>hare<span style=color:#ff79c6>/</span>keyrings<span style=color:#ff79c6>/</span>docker<span style=color:#ff79c6>-</span>archive<span style=color:#ff79c6>-</span>keyring<span style=color:#ff79c6>.</span>gpg
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">35</span>        echo <span style=color:#f1fa8c>&#34;deb [arch=amd64 signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable&#34;</span> <span style=color:#ff79c6>|</span> sudo tee <span style=color:#f1fa8c>/etc/</span>apt<span style=color:#ff79c6>/</span>sources<span style=color:#ff79c6>.</span>list<span style=color:#ff79c6>.</span>d<span style=color:#ff79c6>/</span>docker<span style=color:#ff79c6>.</span>list <span style=color:#ff79c6>&gt;</span> <span style=color:#f1fa8c>/dev/nu</span>ll
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">36</span>        apt<span style=color:#ff79c6>-</span>get update
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">37</span>        apt<span style=color:#ff79c6>-</span>get install <span style=color:#ff79c6>-</span>y docker<span style=color:#ff79c6>-</span>ce docker<span style=color:#ff79c6>-</span>ce<span style=color:#ff79c6>-</span>cli containerd<span style=color:#ff79c6>.</span>io
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">38</span>        curl <span style=color:#ff79c6>-</span>L <span style=color:#f1fa8c>&#34;https://github.com/docker/compose/releases/download/1.29.0/docker-compose-$(uname -s)-$(uname -m)&#34;</span> <span style=color:#ff79c6>-</span>o <span style=color:#f1fa8c>/usr/</span>local<span style=color:#ff79c6>/</span>bin<span style=color:#ff79c6>/</span>docker<span style=color:#ff79c6>-</span>compose
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">39</span>        chmod <span style=color:#ff79c6>+</span>x <span style=color:#f1fa8c>/usr/</span>local<span style=color:#ff79c6>/</span>bin<span style=color:#ff79c6>/</span>docker<span style=color:#ff79c6>-</span>compose
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">40</span>        curl <span style=color:#ff79c6>-</span>sL <span style=color:#f1fa8c>https</span>:<span style=color:#f1fa8c>//</span>deb<span style=color:#ff79c6>.</span>nodesource<span style=color:#ff79c6>.</span>com<span style=color:#ff79c6>/</span>setup_14<span style=color:#ff79c6>.</span>x <span style=color:#ff79c6>|</span> sudo <span style=color:#ff79c6>-</span>E bash <span style=color:#ff79c6>-</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">41</span>        apt<span style=color:#ff79c6>-</span>get update
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">42</span>        apt<span style=color:#ff79c6>-</span>get install <span style=color:#ff79c6>-</span>y nodejs
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">43</span>        apt<span style=color:#ff79c6>-</span>get install <span style=color:#ff79c6>-</span>y ruby<span style=color:#ff79c6>-</span>full zlib1g<span style=color:#ff79c6>-</span>dev
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">44</span>    SHELL
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">45</span><span style=color:#ff79c6>end</span>
+</code></pre></div><p>Una vez creado nuestro <code>.vagrantfile</code> ejecutaremos el siguiente comando para inciar, configurar y provisionar nuestra máquina virtual.</p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-powershell data-lang=powershell><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">1</span>vagrant up
+</code></pre></div><p><img src=https://s3.us-east-2.amazonaws.com/brunovelazquez.com.bucket/2021-05-03-virtualizacion-anidada/maquina-configurada.webp alt="Comando vagrant up ejecutado" title="Comando vagrant up ejecutado"></p>
+<p>Cuando termine, ejecutaremos el siguiente comando y copiaremos la salida.</p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-powershell data-lang=powershell><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">1</span>vagrant <span style=color:#8be9fd;font-style:italic>ssh-config</span>
+</code></pre></div><p><img src=https://s3.us-east-2.amazonaws.com/brunovelazquez.com.bucket/2021-05-03-virtualizacion-anidada/maquina-ssh-config.webp alt="Comando vagrant ssh-config ejecutado" title="Comando vagrant ssh-config ejecutado"></p>
+<p>Lo que copiamos lo pegaremos en nuestro archivo <code>config</code> que se encuentra localizado en <code>~/.ssh/</code>. Si no existe, crearlo.</p>
+<pre tabindex=0><code>Host default
+  HostName 127.0.0.1
+  User vagrant
+  Port 2200
+  UserKnownHostsFile /dev/null
+  StrictHostKeyChecking no
+  PasswordAuthentication no
+  IdentityFile D:/boxes/prueba/.vagrant/machines/default/virtualbox/private_key
+  IdentitiesOnly yes
+  LogLevel FATAL
+</code></pre><p>Para iniciar sesión en nuestra máquina virtual deberemos ejecutar el comando</p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-powershell data-lang=powershell><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">1</span>vagrant ssh
+</code></pre></div><p><img src=https://s3.us-east-2.amazonaws.com/brunovelazquez.com.bucket/2021-05-03-virtualizacion-anidada/vagrant-ssh.webp alt="Comando vagrant ssh ejecutado" title="Comando vagrant ssh ejecutado"></p>
+<h2 id=docker--compose>Docker & Compose</h2>
+<p>Si utilizaste mi archivo de configuración, ya debes tener instalado docker, docker-compose y nodejs, lo básico para iniciar cualquier proyecto web. Para usar docker es necesario configurarlo para ejecutarlo sin necesidad del prefijo sudo, para ello realizaremos lo siguiente.</p>
+<ul>
+<li>Crear el grupo <code>docker</code></li>
+</ul>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">1</span>sudo groupadd docker
+</code></pre></div><ul>
+<li>Agregar nuestro usuario al grupo <code>docker</code></li>
+</ul>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">1</span>sudo usermod -aG docker <span style=color:#8be9fd;font-style:italic>$USER</span>
+</code></pre></div><ul>
+<li>Activar los cambios en los grupos</li>
+</ul>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">1</span>newgrp docker 
+</code></pre></div><ul>
+<li>Verificar que se puedan correr comandos de <code>docker</code> sin la necesidad del prefijo <code>sudo</code></li>
+</ul>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">1</span>docker run hello-world
+</code></pre></div><p><img src=https://s3.us-east-2.amazonaws.com/brunovelazquez.com.bucket/2021-05-03-virtualizacion-anidada/docker-sin-sudo.webp alt="Correr docker sin sudo" title="Correr docker sin sudo"></p>
+<p>Ahora verás como iniciar un nuevo proyecto de Laravel 8 utilizando su nueva herramienta Laravel Sail.</p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">1</span>curl -s <span style=color:#f1fa8c>&#34;https://laravel.build/example-app&#34;</span> | bash
+</code></pre></div><p><img src=https://s3.us-east-2.amazonaws.com/brunovelazquez.com.bucket/2021-05-03-virtualizacion-anidada/laravel-instalado.webp alt="Laravel instalado" title="Laravel instalado"></p>
+<p>Si configuraste y seguiste mis pasos, ahora podrás inciar Laravel Sail con el comando:</p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">1</span><span style=color:#8be9fd;font-style:italic>cd</span> example-app
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">2</span>./vendor/bin/sail up -d
+</code></pre></div><p><img src=https://s3.us-east-2.amazonaws.com/brunovelazquez.com.bucket/2021-05-03-virtualizacion-anidada/sail-up.webp alt="Inicializar Laravel Sail" title="Inicializar Laravel Sail"></p>
+<p>Si visitamos la ip que configuramos <code>http://192.168.0.13</code> en nuestro navegador podremos ver que Laravel ya esta corriendo:</p>
+<p><img src=https://s3.us-east-2.amazonaws.com/brunovelazquez.com.bucket/2021-05-03-virtualizacion-anidada/laravel-running.webp alt="Laravel Sail corriendo" title="Laravel Sail corriendo"></p>
+<h2 id=visual-studio-code-remote-ssh>Visual Studio Code Remote SSH</h2>
+<p>Ahora debemos configurar VS Code para editar el proyecto. Para esto es necesario tener los siguientes plugins:</p>
+<ol>
+<li>Remote - SSH</li>
+<li>Remote - SSH: Editing configuration Files</li>
+</ol>
+<p>Para abrir una conexión remota tenemos que presionar el shortcut <code>Shift + Ctrl + P</code> y buscar <code>Remote SSH: Connect to host</code> y seleccionaremos el host de nuestra máquina virtual:</p>
+<p><img src=https://s3.us-east-2.amazonaws.com/brunovelazquez.com.bucket/2021-05-03-virtualizacion-anidada/ssh-connect-remote.webp alt="VS Code remote ssh connect" title="VS Code remote ssh connect"></p>
+<p>Una vez dentro de nuestra máquina lo único que tendremos que hacer es abrir la carpeta de nuestro proyecto:</p>
+<p><img src=https://s3.us-east-2.amazonaws.com/brunovelazquez.com.bucket/2021-05-03-virtualizacion-anidada/abrir-carpeta-vscode.webp alt="VS Code remote abrir carpeta" title="VS Code remote abrir carpeta"></p>
+<p>Listo, ya podemos modificar el código e incluso abrir una terminal integrada para trabajar con los comandos de Artisan o Sail:</p>
+<p><img src=https://s3.us-east-2.amazonaws.com/brunovelazquez.com.bucket/2021-05-03-virtualizacion-anidada/vscode-funcionando.webp alt="VS Code funcionando" title="VS Code funcionando"></p>
+<p>Para apagar la máquina virtual sólo debes ejecutar el comando:</p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-powershell data-lang=powershell><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">1</span>vagrant halt
+</code></pre></div><h1 id=conclusiónes>Conclusiónes</h1>
+<p>Como lo comentaba al inicio, esta es otra alternativa para usar Linux en Windows. A mi parecer esta es la más comoda ya que nos permite levantar máquinas virtuales de forma ágil y rápida. Si tuvieramos un error en la máquina virtual lo único que tendríamos que hacer es destruirla y volver a iniciarla gracias al provisionamiento. Esto antepone una gran ventaja sobre WSL o Dual Boot. También cabe mencionar que para utilizar estas herramientas es necesario tener una buena computadora por el alto consumo de memoria RAM y uso de procesador.</p>
+</article>
+</div>
+</section>
+<div class="d-flex justify-content-between">
+<a class="btn btn-primary" href=https://brunovelazquez.com/posts/capriccio-cucine/><i data-feather=chevrons-left class=feather-16></i></a>
+<a class="btn btn-primary" href=https://brunovelazquez.com/posts/celular-logistic/><i data-feather=chevrons-right class=feather-16></i></a>
+</div>
+</div>
+</div>
+</div>
+</div><div class="bg-dark p-4">
+<p class="text-center m-0">Copyright (c) 2022 Bruno Velázquez</p>
+</div>
+<script src=/js/vendor.min.003d6daafafc3a3b94d148fe5380ae41ca58598c9b8c7a7d31e284ed10f8bd1edd0ccae6c2ce85bd28a4b5c67addd9558221e14a6ef443ae53d2baee8cd8c1bc.js integrity="sha512-AD1tqvr8OjuU0Uj+U4CuQcpYWYybjHp9MeKE7RD4vR7dDMrmws6FvSiktcZ63dlVgiHhSm70Q65T0rrujNjBvA=="></script></body>
+</html>

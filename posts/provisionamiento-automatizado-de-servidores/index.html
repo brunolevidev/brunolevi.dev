@@ -1,0 +1,352 @@
+<!doctype html><html><head>
+<meta charset=utf-8>
+<meta name=viewport content="width=device-width,initial-scale=1">
+<link rel=stylesheet href=https://brunovelazquez.com/scss/main.min.590decf5a069ee98c560e5fd0b98e2be1fea42c928565e02161476fa996ff6a9.css>
+<title>Bruno Velázquez | Provisionamiento automatizado de servidores</title>
+<meta name=twitter:card content="summary_large_image">
+<meta name=twitter:image content="https://s3.us-east-2.amazonaws.com/brunovelazquez.com.bucket/2021-07-16-provisionamiento-automatizado-de-servidores/banner.webp">
+<meta name=twitter:title content="Provisionamiento automatizado de servidores">
+<meta name=twitter:description content="En esta guía mostraré como automatizar el provisionamiento de tus servidores con Ansible, en esta ocasión intentaremos con la creación de un una instancia que pueda correr un entorno LEMP sobre Ubuntu 18.04 LTS">
+<meta property="og:title" content="Provisionamiento automatizado de servidores">
+<meta property="og:description" content="En esta guía mostraré como automatizar el provisionamiento de tus servidores con Ansible, en esta ocasión intentaremos con la creación de un una instancia que pueda correr un entorno LEMP sobre Ubuntu 18.04 LTS">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://brunovelazquez.com/posts/provisionamiento-automatizado-de-servidores/"><meta property="og:image" content="https://s3.us-east-2.amazonaws.com/brunovelazquez.com.bucket/2021-07-16-provisionamiento-automatizado-de-servidores/banner.webp"><meta property="article:section" content="posts">
+<meta property="article:published_time" content="2021-07-16T00:00:00+00:00">
+<meta property="article:modified_time" content="2021-07-16T00:00:00+00:00"><meta property="og:site_name" content="Bruno Velázquez">
+</head><body class="bg-dark text-white"><nav class="navbar navbar-expand-lg navbar-dark bg-dark shadow">
+<div class=container>
+<a class=navbar-brand href=/>Bruno Velázquez</a>
+<button class=navbar-toggler type=button data-bs-toggle=collapse data-bs-target=#navbarSupportedContent aria-controls=navbarSupportedContent aria-expanded=false aria-label="Toggle navigation">
+<span class=navbar-toggler-icon></span>
+</button>
+<div class="collapse navbar-collapse" id=navbarSupportedContent>
+<ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+<li class=nav-item>
+<a class=nav-link href=/>
+Home
+</a>
+</li>
+</ul>
+</div>
+</div>
+</nav><div id=content>
+<div class=container>
+<div class="row justify-content-center">
+<div class="col-12 col-md-6" id=post-content>
+<section id=main>
+<img src=https://s3.us-east-2.amazonaws.com/brunovelazquez.com.bucket/2021-07-16-provisionamiento-automatizado-de-servidores/banner.webp class="img-fluid mt-5 mb-3 rounded">
+<h1 id=title class=fw-bold>Provisionamiento automatizado de servidores</h1>
+<i data-feather=calendar class="feather-12 text-white-50"></i>
+<time datetime=16-07-2021 class=text-white-50>16 Julio 2021</time>
+<i data-feather=tag class="feather-12 text-white-50"></i>
+<a href=https://brunovelazquez.com/tags/automatizaci%C3%B3n><span class="badge bg-gray-900 text-white-50">Automatización</span></a>
+<a href=https://brunovelazquez.com/tags/digital-ocean><span class="badge bg-gray-900 text-white-50">Digital Ocean</span></a>
+<a href=https://brunovelazquez.com/tags/ansible><span class="badge bg-gray-900 text-white-50">Ansible</span></a>
+<a href=https://brunovelazquez.com/tags/nginx><span class="badge bg-gray-900 text-white-50">Nginx</span></a>
+<a href=https://brunovelazquez.com/tags/virtualizaci%C3%B3n><span class="badge bg-gray-900 text-white-50">Virtualización</span></a>
+<div class=mt-5>
+<article id=content class=post-content>
+<h1 id=introducción>Introducción</h1>
+<p>De acuerdo con (Red Hat, 2021) Ansible es un motor open source que automatiza los procesos para preparar y gestionar la configuración, implementar las aplicaciones y organizarlas, entre otros procedimientos de TI.</p>
+<p>Con la automatización que ofrece Ansible, puede instalar sistemas de software, automatizar las tareas diarias, preparar la infraestructura, mejorar la seguridad y el cumplimiento, ejecutar parches en los sistemas y compartir la automatización en toda la empresa.</p>
+<p>Ansible se conecta a los nodos y les inserta pequeños programas denominados módulos, los cuales permiten llevar a cabo tareas de automatización en la plataforma.</p>
+<p>Esta ejecuta esos programas, los cuales funcionan como modelos de recursos del estado deseado de los sistemas, y, luego, los retira cuando finaliza la tarea.</p>
+<p>En esta pequeña guía te enseñaré un ejemplo práctico de cómo crear un entorno LEMP sobre Ubuntu 18.04 LTS para tus proyectos PHP.</p>
+<h1 id=requisitos>Requisitos</h1>
+<ul>
+<li>Contar con un servidor Linux con acceso vía SSH</li>
+<li>Instalar Ansible en tu máquina nodo, es decir, la computadora donde vas a controlar tus servidores, <a href=https://docs.ansible.com/ansible/latest/installation_guide/intro_installation.html>puedes ver esta guía de instalación</a></li>
+</ul>
+<h1 id=configuración-inicial>Configuración inicial</h1>
+<p>Vamos a realizar el ritual previo a la automatización de nuestros servidores.</p>
+<h2 id=creación-del-droplet-en-digital-ocean>Creación del droplet en Digital Ocean</h2>
+<p>Este paso es muy sencillo, pueden usar el droplet de $5.00usd para este ejemplo.</p>
+<p><img src=https://s3.us-east-2.amazonaws.com/brunovelazquez.com.bucket/2021-07-16-provisionamiento-automatizado-de-servidores/creacion-droplet.webp alt="Vista del dashboard del droplet creado" title="Vista del dashboard del droplet creado"></p>
+<p>Asegurarse de tener acceso por medio de SSH.
+<img src=https://s3.us-east-2.amazonaws.com/brunovelazquez.com.bucket/2021-07-16-provisionamiento-automatizado-de-servidores/acceso-ssh.webp alt="Probando acceso SSH" title="Probando acceso SSH"></p>
+<h2 id=configuración-del-archivo-hosts>Configuración del archivo hosts</h2>
+<p>Ahora tendremos que agregar la ip o dominio de nuestro servidor al archivo hosts que se encuentra en <code>/etc/ansible/hosts</code> y vamos a editarlo para que quede de la siguiente forma:</p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-ruby data-lang=ruby><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">1</span><span style=color:#6272a4># Este es el nombre de grupo de servidores puedes poner lo que quieras</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">2</span><span style=color:#ff79c6>[</span>servers<span style=color:#ff79c6>]</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">3</span><span style=color:#6272a4># Aquí van los datos de cada uno de tus servidores</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">4</span><span style=color:#6272a4># &lt;nombre del servidor&gt; ansible_user=&lt;usuario de tu servidor&gt; domain_name=&lt;tu nombre de dominio&gt; ansible_hsot=&lt;la ip de tu servidor&gt;</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">5</span>server1 ansible_user<span style=color:#ff79c6>=</span>root domain_name<span style=color:#ff79c6>=</span>demo<span style=color:#ff79c6>.</span>brunovelazquez<span style=color:#ff79c6>.</span>com ansible_host<span style=color:#ff79c6>=</span><span style=color:#bd93f9>143</span><span style=color:#ff79c6>.</span><span style=color:#bd93f9>198</span><span style=color:#ff79c6>.</span><span style=color:#bd93f9>245</span><span style=color:#ff79c6>.</span><span style=color:#bd93f9>243</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">6</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">7</span><span style=color:#6272a4># Aquí van las configuraciones el interprete de Python, es importante que lo agregues como Python3</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">8</span><span style=color:#ff79c6>[</span><span style=color:#f1fa8c>all</span>:vars<span style=color:#ff79c6>]</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">9</span>ansible_python_interpreter<span style=color:#ff79c6>=</span><span style=color:#f1fa8c>/usr/</span>bin<span style=color:#ff79c6>/</span>python3
+</code></pre></div><h2 id=prueba-de-que-ansible-está-funcionando>Prueba de que ansible está funcionando</h2>
+<p>Ahora ejecutaremos el siguiente comando de prueba para verificar que todo está bien en nuestro server.</p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">1</span>ansible all -m ping -u root
+</code></pre></div><p>Lo que hace este comando es hacer ping al servidor por medio de la conexión SSH, si es exitoso tendremos la siguiente salida:</p>
+<p><img src=https://s3.us-east-2.amazonaws.com/brunovelazquez.com.bucket/2021-07-16-provisionamiento-automatizado-de-servidores/probando-ansible-1.webp alt="Probando acceso SSH" title="Probando acceso SSH"></p>
+<p>Ejecutaremos otro comando sólo para confirmar.</p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">1</span>ansible all -a <span style=color:#f1fa8c>&#34;ls -las&#34;</span> -u root
+</code></pre></div><p>Lo que hace este comando es simplemente listar el directorio raíz de nuestro servidor y de resultar ok, tendremos la siguiente salida:</p>
+<p><img src=https://s3.us-east-2.amazonaws.com/brunovelazquez.com.bucket/2021-07-16-provisionamiento-automatizado-de-servidores/probando-ansible-2.webp alt="Probando acceso SSH" title="Probando acceso SSH"></p>
+<h2 id=primer-playbook>Primer playbook</h2>
+<p>En Ansible tenemos algo que se llaman playbooks, son archivos de configuración que nos permiten agrupar tareas que se ejecutarán de forma secuencial dentro de nuestro servidor, existe una gran cantidad de módulos para ejecutar estas tareas.</p>
+<p>En nuestra máquina nodo crearemos un directorio para guardar lo necesario para configurar el primer playbook.</p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">1</span>mkdir ansible-playbooks
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">2</span><span style=color:#8be9fd;font-style:italic>cd</span> ansible-palybooks
+</code></pre></div><p>Crearemos un archivo <code>playbook.yml</code> que será nuestro punto de entrada para Ansible. Asimismo este archivo llevará la siguiente información:</p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">1</span>touch playbook.yml
+</code></pre></div><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-yml data-lang=yml><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">  1</span>---
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">  2</span>- <span style=color:#ff79c6>hosts</span>: all
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">  3</span>    <span style=color:#ff79c6>become</span>: <span style=color:#ff79c6>true</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">  4</span>    <span style=color:#ff79c6>vars_files</span>:
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">  5</span>        - vars/default.yml
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">  6</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">  7</span>    <span style=color:#ff79c6>tasks</span>:
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">  8</span>        - <span style=color:#ff79c6>name</span>: Install Prerequisites
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">  9</span>        <span style=color:#ff79c6>apt</span>: name=aptitude update_cache=yes state=latest force_apt_get=yes
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 10</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 11</span>        <span style=color:#6272a4># Sudo Group Setup</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 12</span>        - <span style=color:#ff79c6>name</span>: Make sure we have a &#39;wheel&#39; group
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 13</span>        <span style=color:#ff79c6>group</span>:
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 14</span>            <span style=color:#ff79c6>name</span>: wheel
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 15</span>            <span style=color:#ff79c6>state</span>: present
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 16</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 17</span>        <span style=color:#6272a4># Allow &#39;wheel&#39; group to have passwordless sudo</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 18</span>        - <span style=color:#ff79c6>name</span>: Allow &#39;wheel&#39; group to have passwordless sudo
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 19</span>        <span style=color:#ff79c6>lineinfile</span>:
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 20</span>            <span style=color:#ff79c6>path</span>: /etc/sudoers
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 21</span>            <span style=color:#ff79c6>state</span>: present
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 22</span>            <span style=color:#ff79c6>regexp</span>: <span style=color:#f1fa8c>&#39;^%wheel&#39;</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 23</span>            <span style=color:#ff79c6>line: &#39;%wheel ALL=(ALL) NOPASSWD</span>: ALL&#39;
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 24</span>            <span style=color:#ff79c6>validate</span>: <span style=color:#f1fa8c>&#39;/usr/sbin/visudo -cf %s&#39;</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 25</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 26</span>        <span style=color:#6272a4># User + Key Setup</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 27</span>        - <span style=color:#ff79c6>name</span>: Create a new regular user with sudo privileges
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 28</span>        <span style=color:#ff79c6>user</span>:
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 29</span>            <span style=color:#ff79c6>name</span>: <span style=color:#f1fa8c>&#34;{{ create_user }}&#34;</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 30</span>            <span style=color:#ff79c6>state</span>: present
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 31</span>            <span style=color:#ff79c6>groups</span>: wheel
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 32</span>            <span style=color:#ff79c6>append</span>: <span style=color:#ff79c6>true</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 33</span>            <span style=color:#ff79c6>create_home</span>: <span style=color:#ff79c6>true</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 34</span>            <span style=color:#ff79c6>shell</span>: /bin/bash
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 35</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 36</span>        <span style=color:#6272a4># Set authorized key for remote user</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 37</span>        - <span style=color:#ff79c6>name</span>: Set authorized key for remote user
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 38</span>        <span style=color:#ff79c6>authorized_key</span>:
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 39</span>            <span style=color:#ff79c6>user</span>: <span style=color:#f1fa8c>&#34;{{ create_user }}&#34;</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 40</span>            <span style=color:#ff79c6>state</span>: present
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 41</span>            <span style=color:#ff79c6>key</span>: <span style=color:#f1fa8c>&#34;{{ copy_local_key }}&#34;</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 42</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 43</span>        <span style=color:#6272a4># Disable password authentication for root</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 44</span>        - <span style=color:#ff79c6>name</span>: Disable password authentication for root
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 45</span>        <span style=color:#ff79c6>lineinfile</span>:
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 46</span>            <span style=color:#ff79c6>path</span>: /etc/ssh/sshd_config
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 47</span>            <span style=color:#ff79c6>state</span>: present
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 48</span>            <span style=color:#ff79c6>regexp</span>: <span style=color:#f1fa8c>&#39;^#?PermitRootLogin&#39;</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 49</span>            <span style=color:#ff79c6>line</span>: <span style=color:#f1fa8c>&#39;PermitRootLogin prohibit-password&#39;</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 50</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 51</span>        <span style=color:#6272a4># Install Packages</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 52</span>        - <span style=color:#ff79c6>name</span>: Update apt
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 53</span>        <span style=color:#ff79c6>apt</span>: update_cache=yes
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 54</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 55</span>        - <span style=color:#ff79c6>name</span>: Install required system packages
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 56</span>        <span style=color:#ff79c6>apt</span>: name={{ sys_packages }} state=latest
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 57</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 58</span>        <span style=color:#6272a4># Create project dir</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 59</span>        - <span style=color:#ff79c6>name</span>: Creates directory
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 60</span>        <span style=color:#ff79c6>file</span>:
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 61</span>            <span style=color:#ff79c6>path</span>: /var/www/{{ http_host }}
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 62</span>            <span style=color:#ff79c6>state</span>: directory
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 63</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 64</span>        <span style=color:#6272a4># Nginx Configuration</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 65</span>        - <span style=color:#ff79c6>name</span>: Sets Nginx conf file
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 66</span>        <span style=color:#ff79c6>template</span>:
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 67</span>            <span style=color:#ff79c6>src</span>: <span style=color:#f1fa8c>&#34;files/nginx.conf.j2&#34;</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 68</span>            <span style=color:#ff79c6>dest</span>: <span style=color:#f1fa8c>&#34;/etc/nginx/sites-available/{{ http_conf }}&#34;</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 69</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 70</span>        <span style=color:#6272a4># Enables new site</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 71</span>        - <span style=color:#ff79c6>name</span>: Enables new site
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 72</span>        <span style=color:#ff79c6>file</span>:
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 73</span>            <span style=color:#ff79c6>src</span>: <span style=color:#f1fa8c>&#34;/etc/nginx/sites-available/{{ http_conf }}&#34;</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 74</span>            <span style=color:#ff79c6>dest</span>: <span style=color:#f1fa8c>&#34;/etc/nginx/sites-enabled/{{ http_conf }}&#34;</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 75</span>            <span style=color:#ff79c6>state</span>: link
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 76</span>        <span style=color:#ff79c6>notify</span>: Reload Nginx
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 77</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 78</span>        <span style=color:#6272a4># Removes &#34;default&#34; site    </span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 79</span>        - <span style=color:#ff79c6>name</span>: Removes &#34;default&#34; site
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 80</span>        <span style=color:#ff79c6>file</span>:
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 81</span>            <span style=color:#ff79c6>path</span>: <span style=color:#f1fa8c>&#34;/etc/nginx/sites-enabled/default&#34;</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 82</span>            <span style=color:#ff79c6>state</span>: absent
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 83</span>        <span style=color:#ff79c6>notify</span>: Reload Nginx
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 84</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 85</span>        <span style=color:#6272a4># MySQL Configuration</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 86</span>        - <span style=color:#ff79c6>name</span>: Sets the root password 
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 87</span>        <span style=color:#ff79c6>mysql_user</span>: 
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 88</span>            <span style=color:#ff79c6>name</span>: root 
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 89</span>            <span style=color:#ff79c6>password</span>: <span style=color:#f1fa8c>&#34;{{ mysql_root_password }}&#34;</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 90</span>            <span style=color:#ff79c6>login_user</span>: root
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 91</span>            <span style=color:#ff79c6>login_password</span>: <span style=color:#f1fa8c>&#34;{{mysql_root_password}}&#34;</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 92</span>            <span style=color:#ff79c6>host</span>: localhost
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 93</span>            <span style=color:#ff79c6>login_unix_socket</span>: /var/run/mysqld/mysqld.sock
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 94</span>            <span style=color:#ff79c6>priv</span>: <span style=color:#f1fa8c>&#39;*.*:ALL,GRANT&#39;</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 95</span>            <span style=color:#ff79c6>check_implicit_admin</span>: <span style=color:#ff79c6>true</span> 
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 96</span>            <span style=color:#ff79c6>state</span>: present
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 97</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 98</span>        <span style=color:#6272a4># Removes all anonymous user accounts</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 99</span>        - <span style=color:#ff79c6>name</span>: Removes all anonymous user accounts
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">100</span>        <span style=color:#ff79c6>mysql_user</span>:
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">101</span>            <span style=color:#ff79c6>name</span>: <span style=color:#f1fa8c>&#39;&#39;</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">102</span>            <span style=color:#ff79c6>host_all</span>: <span style=color:#ff79c6>yes</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">103</span>            <span style=color:#ff79c6>state</span>: absent
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">104</span>            <span style=color:#ff79c6>login_user</span>: root
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">105</span>            <span style=color:#ff79c6>login_password</span>: <span style=color:#f1fa8c>&#34;{{ mysql_root_password }}&#34;</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">106</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">107</span>        <span style=color:#6272a4># Removes the MySQL test database</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">108</span>        - <span style=color:#ff79c6>name</span>: Removes the MySQL test database
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">109</span>        <span style=color:#ff79c6>mysql_db</span>: 
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">110</span>            <span style=color:#ff79c6>name</span>: test 
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">111</span>            <span style=color:#ff79c6>state</span>: absent
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">112</span>            <span style=color:#ff79c6>login_user</span>: root
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">113</span>            <span style=color:#ff79c6>login_password</span>: <span style=color:#f1fa8c>&#34;{{ mysql_root_password }}&#34;</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">114</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">115</span>        <span style=color:#6272a4># UFW Setup</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">116</span>        - <span style=color:#ff79c6>name</span>: UFW - Allow SSH connections
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">117</span>        <span style=color:#ff79c6>ufw</span>:
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">118</span>            <span style=color:#ff79c6>rule</span>: allow
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">119</span>            <span style=color:#ff79c6>name</span>: OpenSSH
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">120</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">121</span>        <span style=color:#6272a4># &#34;UFW - Allow HTTP on port {{ http_port }}&#34;</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">122</span>        - <span style=color:#ff79c6>name</span>: <span style=color:#f1fa8c>&#34;UFW - Allow HTTP on port {{ http_port }}&#34;</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">123</span>        <span style=color:#ff79c6>ufw</span>:
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">124</span>            <span style=color:#ff79c6>rule</span>: allow
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">125</span>            <span style=color:#ff79c6>port</span>: <span style=color:#f1fa8c>&#34;{{ http_port }}&#34;</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">126</span>            <span style=color:#ff79c6>proto</span>: tcp
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">127</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">128</span>        <span style=color:#6272a4># Sets Up PHP Info Page</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">129</span>        - <span style=color:#ff79c6>name</span>: Sets Up PHP Info Page
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">130</span>        <span style=color:#ff79c6>template</span>:
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">131</span>            <span style=color:#ff79c6>src</span>: <span style=color:#f1fa8c>&#34;files/info.php.j2&#34;</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">132</span>            <span style=color:#ff79c6>dest</span>: <span style=color:#f1fa8c>&#34;/var/www/{{ http_conf }}/info.php&#34;</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">133</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">134</span>    <span style=color:#ff79c6>handlers</span>:
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">135</span>        - <span style=color:#ff79c6>name</span>: Reload Nginx
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">136</span>            <span style=color:#ff79c6>service</span>:
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">137</span>            <span style=color:#ff79c6>name</span>: nginx
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">138</span>            <span style=color:#ff79c6>state</span>: reloaded
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">139</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">140</span>        - <span style=color:#ff79c6>name</span>: Restart Nginx
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">141</span>            <span style=color:#ff79c6>service</span>:
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">142</span>            <span style=color:#ff79c6>name</span>: nginx
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">143</span>            <span style=color:#ff79c6>state</span>: restarted
+</code></pre></div><p>Crearemos un directorio llamado <code>files</code> donde guardaremos nuestras plantillas. Dentro de este directorio crearemos los siguientes archivos: <code>nginx.conf.j2</code> y <code>ìnfo.php.j2</code>. Es importante mencionar que los tipos de archivo <code>.j2</code> corresponden a un motor de plantillas llamado <a href=https://docs.ansible.com/ansible/latest/user_guide/playbooks_templating.html>Jinja2</a>.</p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">1</span>mkdir files
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">2</span>touch nginx.conf.j2
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">3</span>touch info.php.j2
+</code></pre></div><p>Para el archivo <code>nginx.conf.j2</code> incluiremos lo siguiente:</p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-nginx data-lang=nginx><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 1</span><span style=color:#ff79c6>server</span> {
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 2</span>        <span style=color:#6272a4># Puerto http que utilizará nginx
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 3</span><span style=color:#6272a4></span>        <span style=color:#ff79c6>listen</span> {<span style=color:#ff79c6>{</span> <span style=color:#f1fa8c>http_port</span> }};
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 4</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 5</span>        <span style=color:#6272a4># Directorio del sitio
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 6</span><span style=color:#6272a4></span>        <span style=color:#ff79c6>root</span> <span style=color:#f1fa8c>/var/www/</span>{<span style=color:#ff79c6>{</span> <span style=color:#f1fa8c>http_host</span> }};
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 7</span>        <span style=color:#ff79c6>index</span> <span style=color:#f1fa8c>index.php</span> <span style=color:#f1fa8c>index.html</span> <span style=color:#f1fa8c>index.htm</span> <span style=color:#f1fa8c>index.nginx-debian.html</span>;
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 8</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 9</span>        <span style=color:#6272a4># Dominio el sitio
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">10</span><span style=color:#6272a4></span>        <span style=color:#ff79c6>server_name</span> {<span style=color:#ff79c6>{</span> <span style=color:#f1fa8c>http_host</span> }};
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">11</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">12</span>        <span style=color:#6272a4># Pretty url&#39;s para wordpress
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">13</span><span style=color:#6272a4></span>        <span style=color:#ff79c6>location</span> <span style=color:#f1fa8c>/</span> {
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">14</span>                <span style=color:#ff79c6>try_files</span> <span style=color:#8be9fd;font-style:italic>$uri</span> <span style=color:#8be9fd;font-style:italic>$uri/</span> <span style=color:#f1fa8c>/index.php?</span><span style=color:#8be9fd;font-style:italic>$args</span>;
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">15</span>        }
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">16</span>        
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">17</span>        <span style=color:#6272a4># Configuración para php-fpm
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">18</span><span style=color:#6272a4></span>        <span style=color:#ff79c6>location</span> ~ <span style=color:#f1fa8c>\.php$</span> {
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">19</span>                <span style=color:#ff79c6>include</span> <span style=color:#f1fa8c>snippets/fastcgi-php.conf</span>;
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">20</span>                <span style=color:#ff79c6>fastcgi_pass</span> <span style=color:#f1fa8c>unix:/var/run/php/php7.2-fpm.sock</span>;
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">21</span>        }
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">22</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">23</span>        <span style=color:#ff79c6>location</span> ~<span style=color:#f1fa8c>*</span> <span style=color:#f1fa8c>\.(js|css|png|jpg|jpeg|gif|ico)</span>$ {
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">24</span>                <span style=color:#ff79c6>expires</span> <span style=color:#f1fa8c>max</span>;
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">25</span>                <span style=color:#ff79c6>log_not_found</span> off;
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">26</span>        }
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">27</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">28</span>        <span style=color:#ff79c6>location</span> = <span style=color:#f1fa8c>/robots.txt</span> {
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">29</span>                <span style=color:#ff79c6>allow</span> <span style=color:#f1fa8c>all</span>;
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">30</span>                <span style=color:#ff79c6>log_not_found</span> off;
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">31</span>                <span style=color:#ff79c6>access_log</span> off;
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">32</span>        }
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">33</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">34</span>        <span style=color:#ff79c6>location</span> = <span style=color:#f1fa8c>/favicon.ico</span> {
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">35</span>                <span style=color:#ff79c6>log_not_found</span> off;
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">36</span>                <span style=color:#ff79c6>access_log</span> off;
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">37</span>        }   
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">38</span>             
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">39</span>        <span style=color:#ff79c6>location</span> ~ <span style=color:#f1fa8c>/\.ht</span> {
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">40</span>                <span style=color:#ff79c6>deny</span> <span style=color:#f1fa8c>all</span>;
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">41</span>        }
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">42</span>}
+</code></pre></div><p>Y para el archivo <code>info.php.j2</code> será el siguiente código:</p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-php data-lang=php><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">1</span><span style=color:#ff79c6>&lt;?</span>php
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">2</span>phpinfo();
+</code></pre></div><p>Crearemos un directorio llamado <code>vars</code>.</p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">1</span>mkdir vars
+</code></pre></div><p>Dentro de este directorio crearemos nuestro archivo <code>default.yml</code> el cual almacenará nuestras variables.</p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-yml data-lang=yml><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 1</span>---
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 2</span><span style=color:#6272a4># Nombre del usuario no-root para el servidor</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 3</span><span style=color:#ff79c6>create_user</span>: bruno
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 4</span><span style=color:#ff79c6>copy_local_key</span>: <span style=color:#f1fa8c>&#34;{% raw %}{{ lookup(&#39;file&#39;, lookup(&#39;env&#39;,&#39;HOME&#39;) + &#39;/.ssh/id_rsa.pub&#39;) }}{% endraw %}&#34;</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 5</span><span style=color:#6272a4># Paquetes que serán instalados, al utilizar Ubuntu 18.04 LTS serán los mismos que están en apt</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 6</span><span style=color:#ff79c6>sys_packages</span>: [
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 7</span>  <span style=color:#f1fa8c>&#39;curl&#39;</span>, 
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 8</span>  <span style=color:#f1fa8c>&#39;vim&#39;</span>, 
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 9</span>  <span style=color:#f1fa8c>&#39;git&#39;</span>, 
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">10</span>  <span style=color:#f1fa8c>&#39;ufw&#39;</span>, 
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">11</span>  <span style=color:#f1fa8c>&#39;build-essential&#39;</span>, 
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">12</span>  <span style=color:#f1fa8c>&#39;gcc&#39;</span>, 
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">13</span>  <span style=color:#f1fa8c>&#39;g++&#39;</span>, 
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">14</span>  <span style=color:#f1fa8c>&#39;make&#39;</span>, 
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">15</span>  <span style=color:#f1fa8c>&#39;libc6&#39;</span>, 
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">16</span>  <span style=color:#f1fa8c>&#39;subversion&#39;</span>, 
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">17</span>  <span style=color:#f1fa8c>&#39;cvs&#39;</span>, 
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">18</span>  <span style=color:#f1fa8c>&#39;mercurial&#39;</span>,
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">19</span>  <span style=color:#f1fa8c>&#39;software-properties-common&#39;</span>,
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">20</span>  <span style=color:#f1fa8c>&#39;curl&#39;</span>,
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">21</span>  <span style=color:#f1fa8c>&#39;wget&#39;</span>,
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">22</span>  <span style=color:#f1fa8c>&#39;htop&#39;</span>,
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">23</span>  <span style=color:#f1fa8c>&#39;ntp&#39;</span>,
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">24</span>  <span style=color:#f1fa8c>&#39;nmap&#39;</span>,
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">25</span>  <span style=color:#f1fa8c>&#39;net-tools&#39;</span>,
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">26</span>  <span style=color:#f1fa8c>&#39;nginx&#39;</span>,
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">27</span>  <span style=color:#f1fa8c>&#39;mysql-server&#39;</span>,
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">28</span>  <span style=color:#f1fa8c>&#39;python3-pymysql&#39;</span>,
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">29</span>  <span style=color:#f1fa8c>&#39;php-fpm&#39;</span>,
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">30</span>  <span style=color:#f1fa8c>&#39;php-mysql&#39;</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">31</span>  ]
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">32</span><span style=color:#6272a4># Contraseña para el usuario root de mysql</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">33</span><span style=color:#ff79c6>mysql_root_password</span>: <span style=color:#f1fa8c>&#34;ijWlYWus870k&#34;</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">34</span><span style=color:#6272a4># Nombre del dominio</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">35</span><span style=color:#ff79c6>http_host</span>: <span style=color:#f1fa8c>&#34;demo.brunovelazquez.com&#34;</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">36</span><span style=color:#6272a4># Nombre del archivo de configuración para el sitio de nginx</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">37</span><span style=color:#ff79c6>http_conf</span>: <span style=color:#f1fa8c>&#34;demo.brunovelazquez.com.conf&#34;</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">38</span><span style=color:#6272a4># Puerto que utilizará nginx para las peticiones http</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">39</span><span style=color:#ff79c6>http_port</span>: <span style=color:#f1fa8c>&#34;80&#34;</span>
+</code></pre></div><h2 id=ejecución-del-playbook>Ejecución del playbook</h2>
+<p>Ya tenemos todo listo para provisionar el servidor que acabamos de crear, por lo tanto, es hora de correr el siguiente comando.</p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">1</span>ansible-playbook playbook.yml -l server1 -u root
+</code></pre></div><p>Y si todo va bien, tenemos que concluir con esta salida.</p>
+<p><img src=https://s3.us-east-2.amazonaws.com/brunovelazquez.com.bucket/2021-07-16-provisionamiento-automatizado-de-servidores/probando-playbook.webp alt="Ejecutando playbook" title="Ejecutando playbook"></p>
+<p>Ahora vamos a verificar nuestro dominio, en mi caso <code>demo.brunovelazquez.com</code>.</p>
+<p><img src=https://s3.us-east-2.amazonaws.com/brunovelazquez.com.bucket/2021-07-16-provisionamiento-automatizado-de-servidores/visitando-dominio.webp alt="Visitando la página" title="Visitando la página"></p>
+<h1 id=conclusiónes>Conclusiónes</h1>
+<p>De esta forma hemos automatizado el proceso de provisionamiento de nuestro servidor, minimizando las tareas manuales que podrían convertirse en problemas a futuro por errores humanos en la configuración.</p>
+<p>Sin duda Ansible es una herramienta muy poderosa que como ingenieros de software nos hace muy productivos a la hora de configurar nuestros servidores, es importante mantenerse actualizado ya que los módulos van cambiando conforme van escalando las versiones. Espero les sirva y hayan aprendido algo.</p>
+</article>
+</div>
+</section>
+<div class="d-flex justify-content-between">
+<a class="btn btn-primary" href=https://brunovelazquez.com/posts/celular-logistic/><i data-feather=chevrons-left class=feather-16></i></a>
+</div>
+</div>
+</div>
+</div>
+</div><div class="bg-dark p-4">
+<p class="text-center m-0">Copyright (c) 2022 Bruno Velázquez</p>
+</div>
+<script src=/js/vendor.min.003d6daafafc3a3b94d148fe5380ae41ca58598c9b8c7a7d31e284ed10f8bd1edd0ccae6c2ce85bd28a4b5c67addd9558221e14a6ef443ae53d2baee8cd8c1bc.js integrity="sha512-AD1tqvr8OjuU0Uj+U4CuQcpYWYybjHp9MeKE7RD4vR7dDMrmws6FvSiktcZ63dlVgiHhSm70Q65T0rrujNjBvA=="></script></body>
+</html>
