@@ -3,6 +3,7 @@ languageCode = "es-mx"
 theme = "MainTheme"
 title = "Bruno Velázquez"
 defaultContentLanguage = "es"
+googleAnalytics = 'UA-144643471-1'
 
 [params]
   description = "Soy del Estado de Morelos, México y me especializo en desarrollar soluciones integrales para tu negocio o empresa"
