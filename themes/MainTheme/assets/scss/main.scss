@@ -2,7 +2,7 @@
 // Custom fonts
 @import url('https://fonts.googleapis.com/css2?family=Mr+Dafoe&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Exo:wght@900&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inconsolata:wght@300;500;700&display=swap');
 
 // 1. Include functions first (so you can manipulate colors, SVGs, calc, etc)
 @import "../libs/bootstrap-5.1.3/scss/functions";
@@ -137,8 +137,8 @@ $cyan-800: shade-color($cyan, 60%);
 $cyan-900: shade-color($cyan, 80%);
 
 // scss-docs-start theme-color-variables
-$primary:       $red-500;
-$secondary:     $purple-500;
+$primary:       $purple-500;
+$secondary:     $blue-500;
 $success:       $green;
 $info:          $cyan;
 $warning:       $yellow;
@@ -160,8 +160,8 @@ $grays: (
 ) !default;
 
 // Replace variables
-$font-family-sans-serif:'Roboto', sans-serif;
-$pagination-bg: $gray-800;
+$font-family-sans-serif:'Inconsolata', monospace;
+/* $pagination-bg: $gray-800;
 $pagination-color: $white;
 $pagination-border-color: $gray-800;
 $pagination-focus-bg: $gray-800;
@@ -172,7 +172,7 @@ $pagination-hover-border-color: $gray-800;
 $pagination-active-bg: $primary;
 $pagination-disabled-color: $gray-600;
 $pagination-disabled-bg: $gray-800;
-$pagination-disabled-border-color: $gray-800;
+$pagination-disabled-border-color: $gray-800; */
 
 // 3. Include remainder of required Bootstrap stylesheets
 @import "../libs/bootstrap-5.1.3/scss/variables";
@@ -392,7 +392,7 @@ $utilities: map-merge(
   .post-content>h#{$i}{
     font-weight: bold;
     &:before {
-      color: $secondary;
+      color: $primary;
       content: "#";
       margin-right: 8px;
     }
@@ -400,5 +400,5 @@ $utilities: map-merge(
 }
 
 .post-content>p {
-  color: $gray-500;
+  color: $gray-700;
 }

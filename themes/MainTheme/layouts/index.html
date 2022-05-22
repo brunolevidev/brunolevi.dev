@@ -2,7 +2,7 @@
 <div class="container">
     <div class="row justify-content-center">
         <div class="col-12 col-md-6">
-            <div class="mt-5">
+<!--             <div class="mt-5">
                 <div class="bv-header-container rounded shadow">
                     <div class="bv-body-container">
                         <div class="bv-grid"></div>
@@ -14,13 +14,12 @@
                         <h2 class="bv-header-h2">Velázquez</h2>
                     </div>
                 </div>
-            </div>
-            <hr class="mt-5">
+            </div> -->
             <div class="mt-5">
                 <h1 class="fs-3 fw-bold">Ingeniero en Desarrollo de Software</h1>
-                <p class="lead text-white-50">
-                    Soy del Estado de Morelos, México y me especializo en desarrollar soluciones integrales para tu negocio o empresa.
-                    Si deseas cotizar un sistema a la medida, escríbeme a través de mis redes sociales o correo electrónico
+                <p class="lead">
+                    Me especializo en automatización de procesos a través del desarrollo de sistemas informáticos.
+                    Si deseas una cotización escríbeme a través de mis redes sociales o correo electrónico
                 </p>
                 <div class="d-flex justify-content-start align-items-center">
                     {{ range .Site.Menus.social }}
@@ -36,7 +35,7 @@
             <hr class="mt-5">
             <div class="mt-5">
                 {{ range (.Paginator 3).Pages }}
-                    <div class="card bg-gray-800 rounded border-0 mb-4">
+                    <div class="card rounded border-0 mb-4">
                         <div class="card-body p-5">
                         <h5 class="card-title fw-bold">{{ .Title }}</h5>
                         {{ partial "metadata.html" . }}

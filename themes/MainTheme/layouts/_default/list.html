@@ -3,7 +3,7 @@
     <div class="row justify-content-center">
         <div class="col-12 col-md-6">
             {{ range (.Paginator 10).Pages }}
-                <div class="card bg-gray-800 rounded border-0 mb-4">
+                <div class="card rounded border-0 mb-4">
                     <div class="card-body p-5">
                     <h5 class="card-title fw-bold">{{ .Title }}</h5>
                     {{ partial "metadata.html" . }}
