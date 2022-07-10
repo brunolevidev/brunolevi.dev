@@ -3,16 +3,16 @@
 
 name = "MainTheme"
 license = "MIT"
-licenselink = "https://github.com/brunovelazquez/brunovelazquez.com/blob/main/LICENSE"
+licenselink = "https://github.com/levidotpy/levidotpy.github.io/blob/main/LICENSE"
 description = ""
-homepage = "http://brunovelazquez.com/"
+homepage = "https://brunolevi.dev/"
 tags = []
 features = []
 min_version = "0.41"
 
 [author]
   name = "Bruno Velázquez"
-  homepage = "https://brunovelazquez.com/"
+  homepage = "https://brunolevi.dev/"
 
 # If porting an existing theme
 [original]

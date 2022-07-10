@@ -1,14 +1,14 @@
-baseURL = "https://www.brunovelazquez.com/"
+baseURL = "https://brunolevi.dev/"
 languageCode = "es-mx"
 theme = "MainTheme"
-title = "Bruno Velázquez"
+title = "Bruno Levi"
 defaultContentLanguage = "es"
 googleAnalytics = 'UA-144643471-1'
 
 [params]
   description = "Soy del Estado de Morelos, México y me especializo en desarrollar soluciones integrales para tu negocio o empresa"
   images = ["https://s3.us-east-2.amazonaws.com/brunovelazquez.com.bucket/bg-about.webp"]
-  title = "Bruno Velázquez"
+  title = "Bruno Levi"
 [taxonomies]
   tags = "tags"
 
@@ -36,20 +36,20 @@ googleAnalytics = 'UA-144643471-1'
   [[menu.social]]
     name = "Github"
     pre = "github"
-    url = "https://github.com/BrunoVelazquez"
+    url = "https://github.com/levidotpy"
     weight = 1
   [[menu.social]]
     name = "Instagram"
     pre = "instagram"
-    url = "https://www.instagram.com/brunovelazquez_/"
+    url = "https://www.instagram.com/_levi.py/"
     weight = 2
   [[menu.social]]
     name = "Twitter"
     pre = "twitter"
-    url = "https://twitter.com/brunovelazquez_"
+    url = "https://twitter.com/levidotpy"
     weight = 3
   [[menu.social]]
     name = "Email"
     pre = "mail"
-    url = "mailto:contacto@brunovelazquez.com"
+    url = "mailto:contacto.bruno.velazquez@gmail.com"
     weight = 4
