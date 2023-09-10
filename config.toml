@@ -1,14 +1,14 @@
 baseURL = "https://brunolevi.dev/"
 languageCode = "es-mx"
 theme = "MainTheme"
-title = "Bruno Levi"
+title = "Bruno Levi Dev"
 defaultContentLanguage = "es"
 googleAnalytics = 'UA-144643471-1'
 
 [params]
-  description = "Soy del Estado de Morelos, México y me especializo en desarrollar soluciones integrales para tu negocio o empresa"
+  description = "Soy del Estado de Morelos, México y me especializo en el desarrollo de software, especificamente en las áreas de telemetría, IoT, etc."
   images = ["https://s3.us-east-2.amazonaws.com/brunovelazquez.com.bucket/bg-about.webp"]
-  title = "Bruno Levi"
+  title = "Bruno Levi Dev"
 [taxonomies]
   tags = "tags"
 
@@ -41,12 +41,12 @@ googleAnalytics = 'UA-144643471-1'
   [[menu.social]]
     name = "Instagram"
     pre = "instagram"
-    url = "https://www.instagram.com/_levi.py/"
+    url = "https://www.instagram.com/brunolevidev"
     weight = 2
   [[menu.social]]
     name = "Twitter"
     pre = "twitter"
-    url = "https://twitter.com/levidotpy"
+    url = "https://twitter.com/brunolevidev"
     weight = 3
   [[menu.social]]
     name = "Email"

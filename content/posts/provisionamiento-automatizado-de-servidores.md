@@ -10,7 +10,6 @@ images:
 - "https://s3.us-east-2.amazonaws.com/brunovelazquez.com.bucket/2021-07-16-provisionamiento-automatizado-de-servidores/banner.webp"
 ---
 
-
 # Introducción
 
 De acuerdo con (Red Hat, 2021) Ansible es un motor open source que automatiza los procesos para preparar y gestionar la configuración, implementar las aplicaciones y organizarlas, entre otros procedimientos de TI.
@@ -370,7 +369,7 @@ Ahora vamos a verificar nuestro dominio, en mi caso `demo.brunovelazquez.com`.
 
 ![Visitando la página](https://s3.us-east-2.amazonaws.com/brunovelazquez.com.bucket/2021-07-16-provisionamiento-automatizado-de-servidores/visitando-dominio.webp "Visitando la página")
 
-# Conclusiónes
+# Conclusiones
 
 De esta forma hemos automatizado el proceso de provisionamiento de nuestro servidor, minimizando las tareas manuales que podrían convertirse en problemas a futuro por errores humanos en la configuración.
 
