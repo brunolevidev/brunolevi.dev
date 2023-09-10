@@ -1,0 +1,292 @@
+<!doctype html><html><head>
+<meta charset=utf-8>
+<meta name=viewport content="width=device-width,initial-scale=1">
+<link rel=stylesheet href=https://brunolevi.dev/scss/main.min.657e3da66db82775a0c0a7f1856b2cc2ab6cd1d128b5ab3fb59f469203c30dfa.css>
+<title>Bruno Levi Dev | Series de tiempo en MongoDB</title>
+<meta name=twitter:card content="summary_large_image">
+<meta name=twitter:image content="https://s3.us-east-2.amazonaws.com/brunovelazquez.com.bucket/series-de-tiempo-mongodb.jpg">
+<meta name=twitter:title content="Series de tiempo en MongoDB">
+<meta name=twitter:description content="En este post vamos a revisar las bondades de esta importante característica de MongoDB. Las series de tiempo nos ayudan a registrar datos que se modifican con el tiempo">
+<meta property="og:title" content="Series de tiempo en MongoDB">
+<meta property="og:description" content="En este post vamos a revisar las bondades de esta importante característica de MongoDB. Las series de tiempo nos ayudan a registrar datos que se modifican con el tiempo">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://brunolevi.dev/posts/series-de-tiempo-en-mongodb/"><meta property="og:image" content="https://s3.us-east-2.amazonaws.com/brunovelazquez.com.bucket/series-de-tiempo-mongodb.jpg"><meta property="article:section" content="posts">
+<meta property="article:published_time" content="2023-09-09T00:00:00+00:00">
+<meta property="article:modified_time" content="2023-09-09T00:00:00+00:00"><meta property="og:site_name" content="Bruno Levi Dev">
+<script type=application/javascript>var doNotTrack=!1;doNotTrack||(function(a,e,f,g,b,c,d){a.GoogleAnalyticsObject=b,a[b]=a[b]||function(){(a[b].q=a[b].q||[]).push(arguments)},a[b].l=1*new Date,c=e.createElement(f),d=e.getElementsByTagName(f)[0],c.async=1,c.src=g,d.parentNode.insertBefore(c,d)}(window,document,'script','https://www.google-analytics.com/analytics.js','ga'),ga('create','UA-144643471-1','auto'),ga('send','pageview'))</script>
+</head><body><nav class="navbar navbar-expand-lg navbar-dark bg-dark shadow">
+<div class=container>
+<a class=navbar-brand href=/>Bruno Levi</a>
+<button class=navbar-toggler type=button data-bs-toggle=collapse data-bs-target=#navbarSupportedContent aria-controls=navbarSupportedContent aria-expanded=false aria-label="Toggle navigation">
+<span class=navbar-toggler-icon></span>
+</button>
+<div class="collapse navbar-collapse" id=navbarSupportedContent>
+<ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+<li class=nav-item>
+<a class=nav-link href=/>
+Home
+</a>
+</li>
+</ul>
+</div>
+</div>
+</nav><div id=content>
+<div class=container>
+<div class="row justify-content-center">
+<div class="col-12 col-md-8" id=post-content>
+<section id=main>
+<img src=https://s3.us-east-2.amazonaws.com/brunovelazquez.com.bucket/series-de-tiempo-mongodb.jpg class="img-fluid mt-5 mb-3 rounded">
+<h1 id=title class=fw-bold>Series de tiempo en MongoDB</h1>
+<i data-feather=calendar class=feather-12></i>
+<time datetime=09-09-2023></time>9 Septiembre 2023</time>
+<i data-feather=tag class=feather-12></i>
+<a href=https://brunolevi.dev/tags/mongodb><span class="badge bg-gray-900">MongoDB</span></a>
+<a href=https://brunolevi.dev/tags/bases-de-datos><span class="badge bg-gray-900">Bases de Datos</span></a>
+<a href=https://brunolevi.dev/tags/nosql><span class="badge bg-gray-900">NoSql</span></a>
+<div class=mt-5>
+<article id=content class=post-content>
+<h1 id=introducción>Introducción</h1>
+<p>Los datos de series de tiempo, son colecciones de datos que pueden definirse como una secuencia de &ldquo;data points&rdquo; que tienen asociados una estampa de tiempo, es decir, consisten en métricas hechas desde una fuente de datos sobre un determinado periodo de tiempo.</p>
+<h2 id=ejemplos-de-series-de-tiempo>Ejemplos de series de tiempo</h2>
+<p>Algunos de los siguientes tipos de datos son adecuados para almacenarse en una colección de series temporales:</p>
+<ul>
+<li>
+<h4 id=datos-meteorológicos><strong>Datos Meteorológicos</strong>:</h4>
+<ul>
+<li>Temperatura, humedad, presión atmosférica, etc., registrados en intervalos regulares.</li>
+</ul>
+</li>
+<li>
+<h4 id=datos-financieros><strong>Datos Financieros</strong>:</h4>
+<ul>
+<li>Precios de acciones, tipos de cambio, etc., que pueden registrarse cada minuto, cada hora, o en cualquier otro intervalo de tiempo.</li>
+</ul>
+</li>
+<li>
+<h4 id=datos-de-telemetría><strong>Datos de Telemetría</strong>:</h4>
+<ul>
+<li>Información proveniente de sensores en tiempo real, como la velocidad de un automóvil, la altitud de un avión, etc.</li>
+</ul>
+</li>
+</ul>
+<h2 id=ejemplos-de-lo-que-no-es-una-serie-de-tiempo>Ejemplos de lo que no es una serie de tiempo</h2>
+<ul>
+<li>
+<h4 id=registros-únicos-de-transacciones><strong>Registros Únicos de Transacciones</strong>:</h4>
+<ul>
+<li>Datos que representan eventos únicos y no parte de una serie de eventos que se desarrollan a lo largo del tiempo.</li>
+</ul>
+</li>
+<li>
+<h4 id=datos-demográficos><strong>Datos Demográficos</strong>:</h4>
+<ul>
+<li>Información sobre individuos o grupos que no está necesariamente vinculada a una estampa de tiempo específica, como edad, género, educación, etc.</li>
+</ul>
+</li>
+<li>
+<h4 id=grafos-de-conexiones-o-redes><strong>Grafos de Conexiones o Redes</strong>:</h4>
+<ul>
+<li>Información que representa las relaciones entre diferentes entidades, donde el enfoque principal está en la relación en sí misma y no en cómo cambia esa relación con el tiempo.</li>
+</ul>
+</li>
+</ul>
+<h1 id=requisitos>Requisitos</h1>
+<ul>
+<li>Contar con MongoDB a partir de la <a href=https://www.mongodb.com/docs/v5.3/core/timeseries-collections/>versión 5.0</a></li>
+<li>Establecer un modelo de datos que tenga las siguientes características:
+<ul>
+<li><code>Timestamp</code> (estampa de tiempo): La fecha y hora en la que fue capturado el dato</li>
+<li><code>Metadata</code> (se refiere a los datos fuente): es una etiqueta que identifica de forma única la serie y generalmente no cambia</li>
+<li><code>Measurements</code> (se refiere a las métricas o valores): Se trata de los valores registrados a través del tiempo</li>
+</ul>
+</li>
+<li>Crear la colección con las características para que sea tratada como serie de tiempo</li>
+</ul>
+<h2 id=modelo-de-datos-a-convertir>Modelo de datos a convertir</h2>
+<p>Vamos a convertir el siguiente modelo de datos a una serie de tiempos de MongoDB:</p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-json data-lang=json><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 1</span>{
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 2</span>    <span style=color:#ff79c6>&#34;station_id&#34;</span>: <span style=color:#f1fa8c>&#34;12345&#34;</span>,
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 3</span>    <span style=color:#ff79c6>&#34;location&#34;</span>: {
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 4</span>        <span style=color:#ff79c6>&#34;type&#34;</span>: <span style=color:#f1fa8c>&#34;Point&#34;</span>,
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 5</span>        <span style=color:#ff79c6>&#34;coordinates&#34;</span>: [<span style=color:#bd93f9>-70.6506</span>, <span style=color:#bd93f9>-33.4378</span>]
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 6</span>    },
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 7</span>    <span style=color:#ff79c6>&#34;timestamp&#34;</span>: ISODate(<span style=color:#f1fa8c>&#34;2023-09-08T12:34:56Z&#34;</span>),
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 8</span>    <span style=color:#ff79c6>&#34;temperature&#34;</span>: <span style=color:#bd93f9>22.5</span>,
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 9</span>    <span style=color:#ff79c6>&#34;humidity&#34;</span>: <span style=color:#bd93f9>65.0</span>,
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">10</span>    <span style=color:#ff79c6>&#34;pressure&#34;</span>: <span style=color:#bd93f9>1013.2</span>,
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">11</span>    <span style=color:#ff79c6>&#34;wind&#34;</span>: {
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">12</span>        <span style=color:#ff79c6>&#34;speed&#34;</span>: <span style=color:#bd93f9>10.5</span>,
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">13</span>        <span style=color:#ff79c6>&#34;direction&#34;</span>: <span style=color:#bd93f9>220.0</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">14</span>    },
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">15</span>    <span style=color:#ff79c6>&#34;precipitation&#34;</span>: {
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">16</span>        <span style=color:#ff79c6>&#34;last_hour&#34;</span>: <span style=color:#bd93f9>0.0</span>,
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">17</span>        <span style=color:#ff79c6>&#34;last_24_hours&#34;</span>: <span style=color:#bd93f9>1.2</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">18</span>    },
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">19</span>    <span style=color:#ff79c6>&#34;conditions&#34;</span>: <span style=color:#f1fa8c>&#34;Sunny&#34;</span>,
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">20</span>    <span style=color:#ff79c6>&#34;alerts&#34;</span>: [
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">21</span>        {
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">22</span>            <span style=color:#ff79c6>&#34;type&#34;</span>: <span style=color:#f1fa8c>&#34;Heat Warning&#34;</span>,
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">23</span>            <span style=color:#ff79c6>&#34;description&#34;</span>: <span style=color:#f1fa8c>&#34;Temperatures are expected to rise above 30°C today.&#34;</span>,
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">24</span>            <span style=color:#ff79c6>&#34;start&#34;</span>: ISODate(<span style=color:#f1fa8c>&#34;2023-09-08T00:00:00Z&#34;</span>),
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">25</span>            <span style=color:#ff79c6>&#34;end&#34;</span>: ISODate(<span style=color:#f1fa8c>&#34;2023-09-08T23:59:59Z&#34;</span>)
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">26</span>        }
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">27</span>    ]
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">28</span>}
+</code></pre></div><p>Este modelo de datos permite almacenar una amplia variedad de datos meteorológicos de una manera que facilita tanto el almacenamiento como la consulta de los datos. Los datos se almacenan en un formato que facilita la realización de consultas temporales, y se pueden realizar consultas geográficas gracias al uso de GeoJSON para almacenar la ubicación. En este modelo de datos:</p>
+<ul>
+<li><code>station_id</code>: Es el identificador único de la estación meteorológica que registró los datos.</li>
+<li><code>location</code>: Es un objeto GeoJSON que almacena la ubicación de la estación meteorológica.</li>
+<li><code>timestamp</code>: Es la estampa de tiempo que indica cuándo fueron capturados los datos.</li>
+<li><code>temperature</code>: Es la temperatura registrada en grados Celsius.</li>
+<li><code>humidity</code>: Es la humedad relativa registrada en porcentaje.</li>
+<li><code>pressure</code>: Es la presión atmosférica registrada en hectopascales (hPa).</li>
+<li><code>wind</code>: Es un objeto que almacena la velocidad y la dirección del viento.</li>
+<li><code>speed</code>: Es la velocidad del viento en km/h.</li>
+<li><code>direction</code>: Es la dirección del viento en grados.</li>
+<li><code>precipitation</code>: Es un objeto que almacena la cantidad de precipitación.</li>
+<li><code>last_hour</code>: Es la cantidad de precipitación en la última hora en mm.</li>
+<li><code>last_24_hours</code>: Es la cantidad de precipitación en las últimas 24 horas en mm.</li>
+<li><code>conditions</code>: Es una descripción textual de las condiciones meteorológicas.</li>
+<li><code>alerts</code>: Es un array que puede contener cero o más alertas meteorológicas.</li>
+<li><code>type</code>: Es el tipo de alerta.</li>
+<li><code>description</code>: Es una descripción de la alerta.</li>
+<li><code>start</code>: Es la fecha y hora de inicio de la alerta.</li>
+<li><code>end</code>: Es la fecha y hora de fin de la alerta.</li>
+</ul>
+<h2 id=conversión-a-serie-de-tiempo-de-mongodb>Conversión a serie de tiempo de MongoDB</h2>
+<p>Para utilizar el modelo de datos proporcionado en una colección de series temporales de MongoDB, se tiene que hacer algunas modificaciones para ajustarlo a las características específicas y requisitos de las series temporales en MongoDB. Aquí está el modelo modificado:</p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-json data-lang=json><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 1</span>{
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 2</span>    <span style=color:#ff79c6>&#34;metadata&#34;</span>: {
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 3</span>        <span style=color:#ff79c6>&#34;station_id&#34;</span>: <span style=color:#f1fa8c>&#34;12345&#34;</span>,
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 4</span>        <span style=color:#ff79c6>&#34;location&#34;</span>: {
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 5</span>            <span style=color:#ff79c6>&#34;type&#34;</span>: <span style=color:#f1fa8c>&#34;Point&#34;</span>,
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 6</span>            <span style=color:#ff79c6>&#34;coordinates&#34;</span>: [<span style=color:#bd93f9>-70.6506</span>, <span style=color:#bd93f9>-33.4378</span>]
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 7</span>        }
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 8</span>    },
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 9</span>    <span style=color:#ff79c6>&#34;timestamp&#34;</span>: ISODate(<span style=color:#f1fa8c>&#34;2023-09-08T12:34:56Z&#34;</span>),
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">10</span>    <span style=color:#ff79c6>&#34;measurements&#34;</span>: {
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">11</span>        <span style=color:#ff79c6>&#34;temperature&#34;</span>: <span style=color:#bd93f9>22.5</span>,
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">12</span>        <span style=color:#ff79c6>&#34;humidity&#34;</span>: <span style=color:#bd93f9>65.0</span>,
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">13</span>        <span style=color:#ff79c6>&#34;pressure&#34;</span>: <span style=color:#bd93f9>1013.2</span>,
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">14</span>        <span style=color:#ff79c6>&#34;wind_speed&#34;</span>: <span style=color:#bd93f9>10.5</span>,
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">15</span>        <span style=color:#ff79c6>&#34;wind_direction&#34;</span>: <span style=color:#bd93f9>220.0</span>,
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">16</span>        <span style=color:#ff79c6>&#34;precipitation_last_hour&#34;</span>: <span style=color:#bd93f9>0.0</span>,
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">17</span>        <span style=color:#ff79c6>&#34;precipitation_last_24_hours&#34;</span>: <span style=color:#bd93f9>1.2</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">18</span>    },
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">19</span>    <span style=color:#ff79c6>&#34;conditions&#34;</span>: <span style=color:#f1fa8c>&#34;Sunny&#34;</span>,
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">20</span>    <span style=color:#ff79c6>&#34;alerts&#34;</span>: [
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">21</span>        {
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">22</span>            <span style=color:#ff79c6>&#34;type&#34;</span>: <span style=color:#f1fa8c>&#34;Heat Warning&#34;</span>,
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">23</span>            <span style=color:#ff79c6>&#34;description&#34;</span>: <span style=color:#f1fa8c>&#34;Temperatures are expected to rise above 30°C today.&#34;</span>,
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">24</span>            <span style=color:#ff79c6>&#34;start&#34;</span>: ISODate(<span style=color:#f1fa8c>&#34;2023-09-08T00:00:00Z&#34;</span>),
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">25</span>            <span style=color:#ff79c6>&#34;end&#34;</span>: ISODate(<span style=color:#f1fa8c>&#34;2023-09-08T23:59:59Z&#34;</span>)
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">26</span>        }
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">27</span>    ]
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">28</span>}
+</code></pre></div><h2 id=cambios-realizados>Cambios realizados</h2>
+<ul>
+<li><code>Metadatos agrupados</code>: Los campos de metadatos (<code>station_id</code> y <code>location</code>) se han agrupado bajo un único campo <code>metadata</code>. Esto se alinea con la recomendación de MongoDB de agrupar los metadatos en un campo separado.</li>
+<li><code>Mediciones agrupadas</code>: Los campos individuales de medición se han agrupado bajo un campo <code>measurements</code> para mantener una estructura más organizada.</li>
+<li><code>Flatten Nested Objects</code>: Los objetos anidados para <code>wind</code> y <code>precipitation</code> se han &ldquo;aplanado&rdquo; para facilitar las consultas y el análisis.</li>
+</ul>
+<h2 id=creación-de-la-colección>Creación de la colección</h2>
+<p>Al crear la colección de series temporales en MongoDB, se debe especificar <code>timestamp</code> como el campo de tiempo y <code>metadata</code> como el campo de metadatos. A continuación te enseño a crear la colección:</p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">1</span>db.createCollection<span style=color:#ff79c6>(</span><span style=color:#f1fa8c>&#34;weather_data&#34;</span>, <span style=color:#ff79c6>{</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">2</span>   timeseries: <span style=color:#ff79c6>{</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">3</span>     timeField: <span style=color:#f1fa8c>&#34;timestamp&#34;</span>,
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">4</span>     metaField: <span style=color:#f1fa8c>&#34;metadata&#34;</span>,
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">5</span>     granularity: <span style=color:#f1fa8c>&#34;hours&#34;</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">6</span>   <span style=color:#ff79c6>}</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">7</span><span style=color:#ff79c6>})</span>
+</code></pre></div><p>Del comando anterior:</p>
+<ul>
+<li><code>timeField</code>: Es el campo que contiene la estampa de tiempo de cada documento (registro de datos).</li>
+<li><code>metaField</code>: Es el campo que contiene los metadatos que son compartidos entre múltiples documentos en la colección.</li>
+<li><code>granularity</code>: Es una opción para definir el nivel de granularidad del bucketing. He elegido &ldquo;hours&rdquo; aquí, pero puedes ajustarlo según tus necesidades.</li>
+</ul>
+<h2 id=inserción-de-datos>Inserción de datos</h2>
+<p>Ahora que ya hemos creado nuestra colección de series de tiempo podemos insertar datos:</p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 1</span>db.weather_data.insertOne<span style=color:#ff79c6>({</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 2</span>    <span style=color:#f1fa8c>&#34;metadata&#34;</span>: <span style=color:#ff79c6>{</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 3</span>        <span style=color:#f1fa8c>&#34;station_id&#34;</span>: <span style=color:#f1fa8c>&#34;12345&#34;</span>,
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 4</span>        <span style=color:#f1fa8c>&#34;location&#34;</span>: <span style=color:#ff79c6>{</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 5</span>            <span style=color:#f1fa8c>&#34;type&#34;</span>: <span style=color:#f1fa8c>&#34;Point&#34;</span>,
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 6</span>            <span style=color:#f1fa8c>&#34;coordinates&#34;</span>: <span style=color:#ff79c6>[</span>-70.6506, -33.4378<span style=color:#ff79c6>]</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 7</span>        <span style=color:#ff79c6>}</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 8</span>    <span style=color:#ff79c6>}</span>,
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 9</span>    <span style=color:#f1fa8c>&#34;timestamp&#34;</span>: ISODate<span style=color:#ff79c6>(</span><span style=color:#f1fa8c>&#34;2023-09-08T12:34:56Z&#34;</span><span style=color:#ff79c6>)</span>,
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">10</span>    <span style=color:#f1fa8c>&#34;measurements&#34;</span>: <span style=color:#ff79c6>{</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">11</span>        <span style=color:#f1fa8c>&#34;temperature&#34;</span>: 22.5,
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">12</span>        <span style=color:#f1fa8c>&#34;humidity&#34;</span>: 65.0,
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">13</span>        <span style=color:#f1fa8c>&#34;pressure&#34;</span>: 1013.2,
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">14</span>        <span style=color:#f1fa8c>&#34;wind_speed&#34;</span>: 10.5,
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">15</span>        <span style=color:#f1fa8c>&#34;wind_direction&#34;</span>: 220.0,
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">16</span>        <span style=color:#f1fa8c>&#34;precipitation_last_hour&#34;</span>: 0.0,
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">17</span>        <span style=color:#f1fa8c>&#34;precipitation_last_24_hours&#34;</span>: 1.2
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">18</span>    <span style=color:#ff79c6>}</span>,
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">19</span>    <span style=color:#f1fa8c>&#34;conditions&#34;</span>: <span style=color:#f1fa8c>&#34;Sunny&#34;</span>,
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">20</span>    <span style=color:#f1fa8c>&#34;alerts&#34;</span>: <span style=color:#ff79c6>[</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">21</span>        <span style=color:#ff79c6>{</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">22</span>            <span style=color:#f1fa8c>&#34;type&#34;</span>: <span style=color:#f1fa8c>&#34;Heat Warning&#34;</span>,
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">23</span>            <span style=color:#f1fa8c>&#34;description&#34;</span>: <span style=color:#f1fa8c>&#34;Temperatures are expected to rise above 30°C today.&#34;</span>,
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">24</span>            <span style=color:#f1fa8c>&#34;start&#34;</span>: ISODate<span style=color:#ff79c6>(</span><span style=color:#f1fa8c>&#34;2023-09-08T00:00:00Z&#34;</span><span style=color:#ff79c6>)</span>,
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">25</span>            <span style=color:#f1fa8c>&#34;end&#34;</span>: ISODate<span style=color:#ff79c6>(</span><span style=color:#f1fa8c>&#34;2023-09-08T23:59:59Z&#34;</span><span style=color:#ff79c6>)</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">26</span>        <span style=color:#ff79c6>}</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">27</span>    <span style=color:#ff79c6>]</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">28</span><span style=color:#ff79c6>})</span>
+</code></pre></div><h2 id=conclusiones>Conclusiones</h2>
+<p>Como pudimos ver, las series de tiempo están pensadas para contener una gran cantidad de datos en periodos de tiempo cortos. En MongoDB tenemos varias herramientas para trabajar con series de tiempo, una de esas características es el uso de TTL (tiempo de vida de los datos) para ir borrando una vez que expira su tiempo de vida, para lograr esto tenemos que definirlo en la creación de la colección:</p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">1</span>db.createCollection<span style=color:#ff79c6>(</span><span style=color:#f1fa8c>&#34;weather_data&#34;</span>, <span style=color:#ff79c6>{</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">2</span>   timeseries: <span style=color:#ff79c6>{</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">3</span>     timeField: <span style=color:#f1fa8c>&#34;timestamp&#34;</span>,
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">4</span>     metaField: <span style=color:#f1fa8c>&#34;metadata&#34;</span>,
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">5</span>     granularity: <span style=color:#f1fa8c>&#34;hours&#34;</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">6</span>   <span style=color:#ff79c6>}</span>,
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">7</span>    expireAfterSeconds: <span style=color:#bd93f9>86400</span>
+<span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">8</span><span style=color:#ff79c6>})</span>
+</code></pre></div><p>Evidentemente el uso de esta característica de MongoDB radica en la compresión de los datos ya que según con su documentación, el algoritmo de compresión de los datos es bajo la librería <a href=https://www.mongodb.com/docs/manual/reference/glossary/#std-term-zstd>zstd</a> que es más eficiente que <a href=https://www.mongodb.com/docs/manual/reference/glossary/#std-term-snappy>snappy</a>.</p>
+<p>Las ventajas de uso de las series de tiempo son:</p>
+<ul>
+<li>
+<h3 id=optimización-de-almacenamiento><strong>Optimización de Almacenamiento</strong></h3>
+<ul>
+<li><code>Compresión</code>: MongoDB 5.0 introduce mejoras significativas en la compresión de datos de series temporales, permitiendo almacenar más datos en menos espacio.</li>
+<li><code>Esquema</code> flexible: Puedes aprovechar el modelo de documentos de MongoDB para estructurar datos de series temporales de una manera que facilite las consultas y el análisis.</li>
+</ul>
+</li>
+<li>
+<h3 id=facilidad-de-escalabilidad><strong>Facilidad de Escalabilidad</strong></h3>
+<ul>
+<li><code>Sharding</code>: MongoDB soporta sharding, lo que facilita la escalabilidad horizontal para manejar grandes volúmenes de datos.</li>
+<li><code>Replicación</code>: La replicación en MongoDB asegura la disponibilidad y la redundancia de los datos.</li>
+</ul>
+</li>
+<li>
+<h3 id=consultas-eficientes><strong>Consultas Eficientes</strong></h3>
+<ul>
+<li><code>Índices</code>: MongoDB permite crear índices sobre campos específicos, facilitando consultas rápidas y eficientes.</li>
+<li><code>Aggregation</code> Framework: El framework de agregación de MongoDB es potente y puede ser muy útil para analizar datos de series temporales.</li>
+</ul>
+</li>
+<li>
+<h3 id=integración-con-herramientas-de-análisis><strong>Integración con Herramientas de Análisis</strong></h3>
+<ul>
+<li><code>Conectores</code>: MongoDB ofrece conectores para varias herramientas populares de análisis de datos y BI, facilitando la integración con tu stack de herramientas existente.</li>
+</ul>
+</li>
+</ul>
+<p>Si quieres profundizar en el manejo de series de tiempo puedes encontrar <a href=https://www.mongodb.com/docs/manual/core/timeseries-collections/>documentación de MongoDB aquí</a>. Espero que este artículo te aporte algo de conocimiento y lo uses en tus próximos proyectos.</p>
+</article>
+</div>
+</section>
+<div class="d-flex justify-content-between mt-5">
+<a class="btn btn-primary" href=https://brunolevi.dev/posts/provisionamiento-automatizado-de-servidores/><i data-feather=chevrons-left class=feather-16></i> Post anterior</a>
+</div>
+</div>
+</div>
+</div>
+</div><div class="bg-dark p-4 mt-5">
+<p class="text-center text-white m-0">Copyright (c) 2023 Bruno Velázquez</p>
+</div>
+<script src=/js/vendor.min.003d6daafafc3a3b94d148fe5380ae41ca58598c9b8c7a7d31e284ed10f8bd1edd0ccae6c2ce85bd28a4b5c67addd9558221e14a6ef443ae53d2baee8cd8c1bc.js integrity="sha512-AD1tqvr8OjuU0Uj+U4CuQcpYWYybjHp9MeKE7RD4vR7dDMrmws6FvSiktcZ63dlVgiHhSm70Q65T0rrujNjBvA=="></script></body>
+</html>
