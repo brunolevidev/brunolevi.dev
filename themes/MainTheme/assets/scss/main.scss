@@ -20,7 +20,8 @@ body {
   justify-content: center;
   align-items: center;
   min-height: 100vh;
-  overflow: hidden;
+  overflow: auto; // Cambiado para evitar problemas
+  padding: 20px; // Padding general en móviles
 }
 
 #particles-js {
@@ -42,6 +43,7 @@ body {
   text-align: center;
   box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
   animation: fadeIn 1s ease-out;
+  margin: auto; // Asegura centrado en pantallas pequeñas
 
   .profile {
     margin-bottom: 20px;
@@ -113,3 +115,4 @@ body {
     transform: translateY(0);
   }
 }
+

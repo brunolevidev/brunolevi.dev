@@ -53,3 +53,7 @@ googleAnalytics = 'UA-144643471-1'
     pre = "mail"
     url = "mailto:contacto.bruno.velazquez@gmail.com"
     weight = 4
+[module]
+  [[module.mounts]]
+    source = 'assets'
+    target = 'assets'
