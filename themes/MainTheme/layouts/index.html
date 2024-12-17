@@ -1,52 +1,33 @@
 {{ define "main" }}
+<div id="particles-js"></div>
 <div class="container">
-    <div class="row justify-content-center">
-        <div class="col-12 col-md-6">
-<!--             <div class="mt-5">
-                <div class="bv-header-container rounded shadow">
-                    <div class="bv-body-container">
-                        <div class="bv-grid"></div>
-                        <div class="bv-lines"></div>
-                        <h1 class="bv-header-h1">
-                            <span id="bruno">BRUNO</span>
-                            <span id="bruno-shadow">BRUNO</span>
-                        </h1>
-                        <h2 class="bv-header-h2">Velázquez</h2>
-                    </div>
-                </div>
-            </div> -->
-            <div class="mt-5">
-                <h1 class="fs-3 fw-bold">Ingeniero en Desarrollo de Software</h1>
-                <p class="lead">
-                    Hola, soy Bruno, vivo en Ciudad de México y me especializo en el área de desarrollo backend, microservicios, telemetría e internet de las cosas (IoT).
-                    También soy desarrollador independiente y te puedo ayudar a implementar los requerimientos de software de tu negocio.
-                </p>
-                <div class="d-flex justify-content-start align-items-center">
-                    {{ range .Site.Menus.social }}
-                    <a class="me-2 text-primary" href="{{ .URL }}" target="_blank">
-                        {{ if .Pre }}
-                            {{ $icon :=  printf "<i class=\"feather-24\" data-feather=\"%s\"></i> " .Pre | safeHTML }}
-                            {{ $icon }}
-                        {{ end }}
-                    </a>
-                    {{ end }}
-                </div>
-            </div>
-            <hr class="mt-5">
-            <div class="mt-5">
-                {{ range (.Paginator 3).Pages }}
-                    <div class="card rounded border-0 mb-4">
-                        <div class="card-body p-5">
-                        <h5 class="card-title fw-bold">{{ .Title }}</h5>
-                        {{ partial "metadata.html" . }}
-                        <p class="card-text mt-3">{{ .Description }}</p>
-                        <a href="{{ .Permalink }}" class="btn btn-sm btn-primary">Leer más <i data-feather="chevron-right" class="feather-16"></i></a>
-                        </div>
-                    </div>
-                {{ end }}
-                {{ template "_internal/pagination.html" . }}
-            </div>
-        </div>
+    <div class="profile">
+        <h1>Bruno Levi Dev</h1>
+        <p class="subtitle">Ingeniero de Software Sr.</p>
+        <p class="description">
+            Apasionado por los negocios, IoT y la ingeniería de software. Me gusta crear contenido de alta calidad en español.
+        </p>
+    </div>
+    <div class="links">
+        <a href="https://medium.com/@brunolevidev" target="_blank" class="link">
+            📝 Artículos sobre negocios
+        </a>
+        <a href="https://dev.to/brunolevidev" target="_blank" class="link">
+            💻 Artículos sobre ingeniería
+        </a>
+        <a href="https://www.youtube.com/@brunolevidev" target="_blank" class="link">
+            🎥 Pensamientos
+        </a>
+<!--        <a href="https://tiktok.com/@tu-usuario" target="_blank" class="link">
+            ⚡ Consejos rápidos
+        </a>-->
+        <a href="https://www.instagram.com/brunolevidev/" target="_blank" class="link">
+            📸 Estilo de vida dev
+        </a>
+        <a href="https://www.linkedin.com/in/brunolevidev/" target="_blank" class="link">
+            🚀 Linkedin
+        </a>
     </div>
 </div>
+
 {{ end }}

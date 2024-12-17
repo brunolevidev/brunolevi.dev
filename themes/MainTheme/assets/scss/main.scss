@@ -1,404 +1,115 @@
+// Paleta de colores
+$primary-color: #8f80de;
+$secondary-color: #EEEEEE;
+$background-color: #232741;
+$card-bg: #393E46;
+$text-color: #EEEEEE;
+$link-hover: #00FFF5;
 
-// Custom fonts
-@import url('https://fonts.googleapis.com/css2?family=Mr+Dafoe&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Exo:wght@900&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Inconsolata:wght@300;500;700&display=swap');
-
-// 1. Include functions first (so you can manipulate colors, SVGs, calc, etc)
-@import "../libs/bootstrap-5.1.3/scss/functions";
-
-// 2. Include any default variable overrides here
-
-// scss-docs-start gray-color-variables
-$white:    #fff;
-$gray-100: #f8f9fa;
-$gray-200: #e9ecef;
-$gray-300: #dee2e6;
-$gray-400: #ced4da;
-$gray-500: #adb5bd;
-$gray-600: #6c757d;
-$gray-700: #495057;
-$gray-800: #343a40;
-$gray-900: #212529;
-$black:    #000;
-// scss-docs-end gray-color-variables
-
-// scss-docs-start color-variables
-$blue:    #0d6efd;
-$indigo:  #6610f2;
-$purple:  #6f42c1;
-$pink:    #d63384;
-$red:     #dc3545;
-$orange:  #fd7e14;
-$yellow:  #ffc107;
-$green:   #198754;
-$teal:    #20c997;
-$cyan:    #0dcaf0;
-// scss-docs-end color-variables
-
-$blue-100: tint-color($blue, 80%);
-$blue-200: tint-color($blue, 60%);
-$blue-300: tint-color($blue, 40%);
-$blue-400: tint-color($blue, 20%);
-$blue-500: $blue;
-$blue-600: shade-color($blue, 20%);
-$blue-700: shade-color($blue, 40%);
-$blue-800: shade-color($blue, 60%);
-$blue-900: shade-color($blue, 80%);
-
-$indigo-100: tint-color($indigo, 80%);
-$indigo-200: tint-color($indigo, 60%);
-$indigo-300: tint-color($indigo, 40%);
-$indigo-400: tint-color($indigo, 20%);
-$indigo-500: $indigo;
-$indigo-600: shade-color($indigo, 20%);
-$indigo-700: shade-color($indigo, 40%);
-$indigo-800: shade-color($indigo, 60%);
-$indigo-900: shade-color($indigo, 80%);
-
-$purple-100: tint-color($purple, 80%);
-$purple-200: tint-color($purple, 60%);
-$purple-300: tint-color($purple, 40%);
-$purple-400: tint-color($purple, 20%);
-$purple-500: $purple;
-$purple-600: shade-color($purple, 20%);
-$purple-700: shade-color($purple, 40%);
-$purple-800: shade-color($purple, 60%);
-$purple-900: shade-color($purple, 80%);
-
-$pink-100: tint-color($pink, 80%);
-$pink-200: tint-color($pink, 60%);
-$pink-300: tint-color($pink, 40%);
-$pink-400: tint-color($pink, 20%);
-$pink-500: $pink;
-$pink-600: shade-color($pink, 20%);
-$pink-700: shade-color($pink, 40%);
-$pink-800: shade-color($pink, 60%);
-$pink-900: shade-color($pink, 80%);
-
-$red-100: tint-color($red, 80%);
-$red-200: tint-color($red, 60%);
-$red-300: tint-color($red, 40%);
-$red-400: tint-color($red, 20%);
-$red-500: $red;
-$red-600: shade-color($red, 20%);
-$red-700: shade-color($red, 40%);
-$red-800: shade-color($red, 60%);
-$red-900: shade-color($red, 80%);
-
-$orange-100: tint-color($orange, 80%);
-$orange-200: tint-color($orange, 60%);
-$orange-300: tint-color($orange, 40%);
-$orange-400: tint-color($orange, 20%);
-$orange-500: $orange;
-$orange-600: shade-color($orange, 20%);
-$orange-700: shade-color($orange, 40%);
-$orange-800: shade-color($orange, 60%);
-$orange-900: shade-color($orange, 80%);
-
-$yellow-100: tint-color($yellow, 80%);
-$yellow-200: tint-color($yellow, 60%);
-$yellow-300: tint-color($yellow, 40%);
-$yellow-400: tint-color($yellow, 20%);
-$yellow-500: $yellow;
-$yellow-600: shade-color($yellow, 20%);
-$yellow-700: shade-color($yellow, 40%);
-$yellow-800: shade-color($yellow, 60%);
-$yellow-900: shade-color($yellow, 80%);
-
-$green-100: tint-color($green, 80%);
-$green-200: tint-color($green, 60%);
-$green-300: tint-color($green, 40%);
-$green-400: tint-color($green, 20%);
-$green-500: $green;
-$green-600: shade-color($green, 20%);
-$green-700: shade-color($green, 40%);
-$green-800: shade-color($green, 60%);
-$green-900: shade-color($green, 80%);
-
-$teal-100: tint-color($teal, 80%);
-$teal-200: tint-color($teal, 60%);
-$teal-300: tint-color($teal, 40%);
-$teal-400: tint-color($teal, 20%);
-$teal-500: $teal;
-$teal-600: shade-color($teal, 20%);
-$teal-700: shade-color($teal, 40%);
-$teal-800: shade-color($teal, 60%);
-$teal-900: shade-color($teal, 80%);
-
-$cyan-100: tint-color($cyan, 80%);
-$cyan-200: tint-color($cyan, 60%);
-$cyan-300: tint-color($cyan, 40%);
-$cyan-400: tint-color($cyan, 20%);
-$cyan-500: $cyan;
-$cyan-600: shade-color($cyan, 20%);
-$cyan-700: shade-color($cyan, 40%);
-$cyan-800: shade-color($cyan, 60%);
-$cyan-900: shade-color($cyan, 80%);
-
-// scss-docs-start theme-color-variables
-$primary:       $purple-500;
-$secondary:     $blue-500;
-$success:       $green;
-$info:          $cyan;
-$warning:       $yellow;
-$danger:        $red;
-$light:         $gray-100;
-$dark:          $gray-900;
-// scss-docs-end theme-color-variables
-
-$grays: (
-  "gray-100": $gray-100,
-  "gray-200": $gray-200,
-  "gray-300": $gray-300,
-  "gray-400": $gray-400,
-  "gray-500": $gray-500,
-  "gray-600": $gray-600,
-  "gray-700": $gray-700,
-  "gray-800": $gray-800,
-  "gray-900": $gray-900
-) !default;
-
-// Replace variables
-$font-family-sans-serif:'Inconsolata', monospace;
-/* $pagination-bg: $gray-800;
-$pagination-color: $white;
-$pagination-border-color: $gray-800;
-$pagination-focus-bg: $gray-800;
-$pagination-focus-bg: $primary;
-$pagination-hover-bg: $gray-800;
-$pagination-hover-color: $primary;
-$pagination-hover-border-color: $gray-800;
-$pagination-active-bg: $primary;
-$pagination-disabled-color: $gray-600;
-$pagination-disabled-bg: $gray-800;
-$pagination-disabled-border-color: $gray-800; */
-
-// 3. Include remainder of required Bootstrap stylesheets
-@import "../libs/bootstrap-5.1.3/scss/variables";
-@import "../libs/bootstrap-5.1.3/scss/mixins";
-@import "../libs/bootstrap-5.1.3/scss/root";
-
-// 4. Include any optional Bootstrap CSS as needed
-@import "../libs/bootstrap-5.1.3/scss/utilities";
-@import "../libs/bootstrap-5.1.3/scss/reboot";
-@import "../libs/bootstrap-5.1.3/scss/type";
-@import "../libs/bootstrap-5.1.3/scss/images";
-@import "../libs/bootstrap-5.1.3/scss/containers";
-@import "../libs/bootstrap-5.1.3/scss/grid";
-@import "../libs/bootstrap-5.1.3/scss/helpers";
-@import "../libs/bootstrap-5.1.3/scss/tables";
-@import "../libs/bootstrap-5.1.3/scss/forms";
-@import "../libs/bootstrap-5.1.3/scss/buttons";
-@import "../libs/bootstrap-5.1.3/scss/transitions";
-@import "../libs/bootstrap-5.1.3/scss/dropdown";
-@import "../libs/bootstrap-5.1.3/scss/button-group";
-@import "../libs/bootstrap-5.1.3/scss/nav";
-@import "../libs/bootstrap-5.1.3/scss/navbar";
-@import "../libs/bootstrap-5.1.3/scss/card";
-@import "../libs/bootstrap-5.1.3/scss/accordion";
-@import "../libs/bootstrap-5.1.3/scss/breadcrumb";
-@import "../libs/bootstrap-5.1.3/scss/pagination";
-@import "../libs/bootstrap-5.1.3/scss/badge";
-@import "../libs/bootstrap-5.1.3/scss/alert";
-@import "../libs/bootstrap-5.1.3/scss/progress";
-@import "../libs/bootstrap-5.1.3/scss/list-group";
-@import "../libs/bootstrap-5.1.3/scss/close";
-@import "../libs/bootstrap-5.1.3/scss/toasts";
-@import "../libs/bootstrap-5.1.3/scss/modal";
-@import "../libs/bootstrap-5.1.3/scss/tooltip";
-@import "../libs/bootstrap-5.1.3/scss/popover";
-@import "../libs/bootstrap-5.1.3/scss/carousel";
-@import "../libs/bootstrap-5.1.3/scss/spinners";
-@import "../libs/bootstrap-5.1.3/scss/offcanvas";
-@import "../libs/bootstrap-5.1.3/scss/placeholders";
-
-// 5. Add utility functions
-
-$all-colors: map-merge-multiple($blues, $indigos, $purples, $pinks, $reds, $oranges, $yellows, $greens, $teals, $cyans, $grays);
-
-$utilities: map-merge(
-  $utilities,
-  (
-    "color": map-merge(
-      map-get($utilities, "color"),
-      (
-        values: map-merge(
-          map-get(map-get($utilities, "color"), "values"),
-          (
-            $all-colors
-          ),
-        ),
-      ),
-    ),
-  )
-);
-
-$utilities: map-merge(
-  $utilities,
-  (
-    "background-color": map-merge(
-      map-get($utilities, "background-color"),
-      (
-        values: map-merge(
-          map-get(map-get($utilities, "background-color"), "values"),
-          (
-            $all-colors
-          ),
-        ),
-      ),
-    ),
-  )
-);
-
-// 6. Optionally include utilities API last to generate classes based on the Sass map in `_utilities.scss`
-@import "../libs/bootstrap-5.1.3/scss/utilities/api";
-
-// 7. Add additional custom code here
-
-.feather-12{
-  width: 12px;
-  height: 12px;
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
 
-.feather-16{
-    width: 16px;
-    height: 16px;
+body {
+  font-family: 'Inter', sans-serif;
+  background: $background-color;
+  color: $text-color;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  overflow: hidden;
 }
 
-.feather-24{
-    width: 24px;
-    height: 24px;
-}
-
-.feather-32{
-    width: 32px;
-    height: 32px;
-}
-
-.bv-header-container, .bv-body-container {
-    width: 100%;
-    min-height: 300px;
-    height: 100%;
-    margin: 0;
-    overflow: hidden;
-}
-
-.bv-body-container {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-direction: column;
-    background: radial-gradient(rgba(#7600bf, 0.5) 0%, transparent 70%), linear-gradient(#0b161e 40%, #202076 70%);
-    perspective: 700px;
-    font-size: clamp(10px, 2vw, 20px);
-}
-
-.bv-lines {
-    $color: #59c1fe;
-    position: fixed;
-    width: 100vw;
-    height: 3em;
-    background: linear-gradient(rgba($color, 0.2) 20%, $color 40%, $color 60%, rgba($color, 0.2) 80%);
-    background-size: 1px 0.5em;
-    box-shadow: 0 0 1em rgba($color, 0.4);
-    transform: translateY(-1em);
-    left: 0;
-}
-
-.bv-header-h1 {
-    position: relative;
-    font-family: 'Exo';
-    font-size: 80px;
-    margin: 0;
-    transform: skew(-15deg);
-    letter-spacing: 0.03em;
-    
-    &::after {
-        content: '';
-        position: absolute;
-        top: -0.1em;
-        right: 0.05em;
-        width: 0.4em;
-        height: 0.4em;
-        background: 
-        radial-gradient(white 3%, rgba(white, 0.3) 15%, rgba(white, 0.05) 60%, transparent 80%),
-        radial-gradient(rgba(white, 0.2) 50%, transparent 60%) 50% 50% / 5% 100%,
-        radial-gradient(rgba(white, 0.2) 50%, transparent 60%) 50% 50% / 70% 5%;
-        background-repeat: no-repeat;
-        animation-duration: 2s;
-        animation-name: flareAnim;
-    }
-    
-    span:first-child {
-        display: block;
-        text-shadow: 0 0 0.1em #8ba2d0, 0 0 0.2em black,  0 0 5em #165ff3;
-        -webkit-text-stroke: 0.06em rgba(black, 0.5);
-    }
-    
-    span:last-child {
-        position: absolute;
-        left: 0;
-        top: 0;
-        background-image: linear-gradient(#032d50 25%, #00a1ef 35%, white 50%, #20125f 50%, #8313e7 55%, #ff61af 75%);
-        -webkit-text-stroke: 0.01em #94a0b9;
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-    }
-}
-
-@keyframes flareAnim {
-    from {
-      opacity: 0%;
-    }
-  
-    to {
-      opacity: 100%;
-    }
-  }
-
-.bv-header-h2 {
-    font-family: 'Mr Dafoe';
-    margin: 0;
-    font-size: 60px;
-    margin-top: -0.6em;
-    color: white;
-    text-shadow: 0 0 0.05em #fff, 0 0 0.2em #fe05e1, 0 0 0.3em #fe05e1;
-    transform: rotate(-7deg);
-}
-
-.bv-grid {
-    $main: #7d41e6;
-    $glow: rgba(#2e26ff, 0.4);
-    background: 
-    linear-gradient(transparent 65%, $glow 75%, $main 80%, $glow 85%, transparent 95%),
-    linear-gradient(90deg, transparent 65%, $glow 75%, $main 80%, $glow 85%, transparent 95%);
-    background-size: 50px 50px;
-    width: 5000px;
-    height: 2500px;
-    position: absolute;
-    bottom: -1200px;
-    transform: rotateX(-100deg);
-    -webkit-mask-image: linear-gradient(rgba(0,0,0,1), rgba(0,0,0,0) 80%);
-}
-
-.post-content>p>img {
+#particles-js {
+  position: fixed;
+  top: 0;
+  left: 0;
   width: 100%;
-  height: auto;
+  height: 100%;
+  z-index: -1;
 }
 
+// Contenedor principal
+.container {
+  background: $card-bg;
+  border-radius: 16px;
+  padding: 40px;
+  max-width: 450px;
+  width: 90%;
+  text-align: center;
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+  animation: fadeIn 1s ease-out;
 
-@for $i from 1 through 6 {
-  .post-content>h#{$i}{
-    font-weight: bold;
-    &:before {
-      color: $primary;
-      content: "#";
-      margin-right: 8px;
+  .profile {
+    margin-bottom: 20px;
+
+    .profile-pic {
+      width: 120px;
+      height: 120px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 4px solid $primary-color;
+      margin-bottom: 15px;
+    }
+
+    h1 {
+      font-size: 2rem;
+      color: $primary-color;
+      margin-bottom: 5px;
+    }
+
+    .subtitle {
+      font-size: 1.2rem;
+      color: $secondary-color;
+      margin-bottom: 15px;
+    }
+
+    .description {
+      font-size: 1rem;
+      color: rgba($text-color, 0.8);
+      line-height: 1.5;
+      margin-bottom: 10px;
+    }
+  }
+
+  .links {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+
+    .link {
+      display: block;
+      padding: 12px;
+      text-decoration: none;
+      color: $text-color;
+      font-size: 1rem;
+      font-weight: 500;
+      background: rgba($primary-color, 0.1);
+      border: 1px solid transparent;
+      border-radius: 8px;
+      transition: all 0.3s ease;
+      cursor: pointer;
+
+      &:hover {
+        background: $primary-color;
+        color: $background-color;
+        transform: scale(1.03);
+      }
     }
   }
 }
 
-.post-content>p {
-  color: $gray-700;
+// Animación sutil de entrada
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
