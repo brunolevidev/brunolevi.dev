@@ -1,12 +1,11 @@
 <!DOCTYPE html>
 <html>
     {{- partial "head.html" . -}}
-    <body>
+    <body class="index-main">
         {{- partial "header.html" . -}}
-        <div id="content">
         {{- block "main" . }}{{- end }}
-        </div>
         {{- partial "footer.html" . -}}
+        {{- partial "back-to-top.html" . -}}
         {{- partial "script.html" . -}}
     </body>
 </html>
